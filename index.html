@@ -10,53 +10,45 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-sm">
+    <nav class="bg-black/70 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-center h-12">
                 <div class="flex space-x-8">
-                    <a href="#home" class="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors duration-200">Home</a>
-                    <a href="#education" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Education</a>
-                    <a href="#experience" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Experience</a>
-                    <a href="#footprint" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Footprint</a>
-                    <a href="#honor" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Honor</a>
-                    <a href="#blogs" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Blogs</a>
+                    <a href="#home" class="text-sm font-medium text-white hover:text-gray-300 transition-colors duration-200">Home</a>
+                    <a href="#education" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Education</a>
+                    <a href="#experience" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Experience</a>
+                    <a href="#project" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Project</a>
+                    <a href="#footprint" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Footprint</a>
+                    <a href="#honor" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Honor</a>
+                    <a href="#blogs" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Blogs</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main id="home" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 pt-12">
+    <main id="home" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-gray-100 pt-12">
         <div class="relative">
             <!-- Decorative background elements -->
-            <div class="absolute -top-20 -left-20 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-            <div class="absolute -top-20 -right-20 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-            <div class="absolute -bottom-20 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+            <div class="absolute -top-20 -left-20 w-72 h-72 bg-slate-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
+            <div class="absolute -top-20 -right-20 w-72 h-72 bg-gray-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+            <div class="absolute -bottom-20 left-20 w-72 h-72 bg-zinc-200 rounded-full mix-blend-multiply filter blur-xl opacity-25 animate-blob animation-delay-4000"></div>
             
             <!-- Main content -->
-            <div class="relative space-y-8">
+            <div class="relative space-y-4">
                 <!-- Hi! with elegant styling -->
                 <div class="flex items-center justify-start">
-                    <div class="relative">
-                        <h1 class="text-7xl font-light text-gray-800 tracking-tight">
-                            Hi<span class="text-indigo-600 font-normal">!</span>
-                        </h1>
-                        <div class="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full"></div>
-                    </div>
+                    <h1 class="text-6xl font-bold text-gray-800">
+                        Hi!
+                    </h1>
                 </div>
                 
-                <!-- I'm Piccaboo with gradient and modern styling -->
-                <div class="flex items-center space-x-4">
-                    <div class="w-1 h-16 bg-gradient-to-b from-indigo-600 to-purple-600 rounded-full"></div>
-                    <h2 class="text-6xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                        I'm Piccaboo
+                <!-- I'm Piccaboo with gradient on name only -->
+                <div class="flex items-center">
+                    <h2 class="text-7xl font-bold text-gray-800">
+                        I'm <span class="bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-700 bg-clip-text text-transparent">Piccaboo</span>
                     </h2>
                 </div>
-                
-                <!-- Subtitle with typing effect style -->
-                <p class="text-xl text-gray-600 font-light tracking-wide pl-6 opacity-80">
-                    Welcome to my space
-                </p>
             </div>
         </div>
     </main>
@@ -80,9 +72,85 @@
     </style>
 
     <!-- Education Section -->
-    <section id="education" class="min-h-screen flex items-center justify-center bg-white">
-        <div class="text-center">
-            <h2 class="text-4xl font-bold text-gray-800">Education</h2>
+    <section id="education" class="min-h-screen bg-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Section Title -->
+            <h2 class="text-5xl font-bold text-gray-800 mb-10">Education</h2>
+            
+            <!-- Education Timeline -->
+            <div class="relative">
+                <!-- Vertical Timeline Line -->
+                <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-gray-300 hidden md:block" style="left: 2rem;"></div>
+                
+                <div class="space-y-6">
+                    <!-- Education Item 1 -->
+                    <div class="relative pl-0 md:pl-20">
+                        <!-- Timeline Dot -->
+                        <div class="absolute left-0 top-1 w-4 h-4 bg-blue-600 rounded-full border-4 border-white shadow hidden md:block" style="left: 1.5rem;"></div>
+                        
+                        <!-- Content Card -->
+                        <div class="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-row gap-6">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-1">Bachelor of Engineering</h3>
+                                <h4 class="text-lg font-medium mb-1" style="color: rgb(0, 135, 60);"><a href="https://www.cau.edu.cn/" target="_blank" class="hover:underline">Chinese Agricultural University</a></h4>
+                                <p class="text-gray-500 mb-3">2019 - 2023</p>
+                                <ul class="text-gray-600 space-y-1">
+                                    <li>• Graduated Summa Cum Laude with 3.95/4.00 GPA</li>
+                                    <li>• Awarded Outstanding Graduate</li>
+                                    <li>• Won Third Place in the School Football Tournament as Defensive Midfielde</li>
+                                </ul>
+                            </div>
+                            <div class="flex-shrink-0 flex items-center">
+                                <img src="figures/univ_logo/cau.png" alt="CAU Logo" class="w-auto h-28 object-contain">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Education Item 2 -->
+                    <div class="relative pl-0 md:pl-20">
+                        <!-- Timeline Dot -->
+                        <div class="absolute left-0 top-1 w-4 h-4 bg-blue-600 rounded-full border-4 border-white shadow hidden md:block" style="left: 1.5rem;"></div>
+                        
+                        <!-- Content Card -->
+                        <div class="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-row gap-6">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-1">Master of Education </h3>
+                                <h4 class="text-lg font-medium mb-1" style="color: rgb(0, 82, 155);"><a href="https://www.ucas.ac.cn/" target="_blank" class="hover:underline">University of Chinese Academy of Sciences</a></h4>
+                                <p class="text-gray-500 mb-3">2023 - Present</p>
+                                <ul class="text-gray-600 space-y-1">
+                                    <li>• Secondary Master's Degree in Science and Technology Education</li>
+                                    <li>• National Program for Cultivating Outstanding Primary and Secondary School Teachers</li>
+                                </ul>
+                            </div>
+                            <div class="flex-shrink-0 flex items-center">
+                                <img src="figures/univ_logo/cas.png" alt="CAS Logo" class="w-auto h-24 object-contain">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Education Item 3 -->
+                    <div class="relative pl-0 md:pl-20">
+                        <!-- Timeline Dot -->
+                        <div class="absolute left-0 top-1 w-4 h-4 bg-blue-600 rounded-full border-4 border-white shadow hidden md:block" style="left: 1.5rem;"></div>
+                        
+                        <!-- Content Card -->
+                        <div class="bg-gray-50 rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-row gap-6">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-1">Ph.D. Student</h3>
+                                <h4 class="text-lg font-medium mb-1" style="color: rgb(0, 82, 155);"><a href="http://www.ia.cas.cn/" target="_blank" class="hover:underline">Institute of Automation, Chinese Academy of Sciences</a></h4>
+                                <p class="text-gray-500 mb-3">2023 - Present</p>
+                                <ul class="text-gray-600 space-y-1">
+                                    <li>• Enrolled in a Combined Master's and Ph.D. Program in Control Theory and Control Engineering</li>
+                                    <li>• Won First Place in the School Football Tournament as Defensive Midfielde</li>
+                                </ul>
+                            </div>
+                            <div class="flex-shrink-0 flex items-center">
+                                <img src="figures/univ_logo/ia.png" alt="IA Logo" class="w-auto h-30 object-contain">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -90,6 +158,13 @@
     <section id="experience" class="min-h-screen flex items-center justify-center bg-gray-50">
         <div class="text-center">
             <h2 class="text-4xl font-bold text-gray-800">Experience</h2>
+        </div>
+    </section>
+
+    <!-- Project Section -->
+    <section id="project" class="min-h-screen flex items-center justify-center bg-white">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-gray-800">Project</h2>
         </div>
     </section>
 
