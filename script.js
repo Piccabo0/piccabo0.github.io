@@ -101,17 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
             ]);
             
             // Load China provinces GeoJSON (but don't add to map yet)
-            // Using GitHub-hosted GeoJSON instead of Aliyun API to avoid CORS issues
-            fetch('https://raw.githubusercontent.com/longwosion/geojson-map-china/master/geometryProvince/100000_full.json')
-                .then(response => {
-                    console.log('Province GeoJSON fetch response:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
+            fetch('data/china-provinces.json')
+                .then(response => response.json())
                 .then(data => {
-                    console.log('Province GeoJSON loaded successfully');
                     // Create province layer
                     provinceLayer = L.geoJSON(data, {
                         style: function(feature) {
@@ -162,16 +154,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 .catch(error => console.error('Error loading province GeoJSON:', error));
             
             // Load world countries GeoJSON
-            fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
-                .then(response => {
-                    console.log('Country GeoJSON fetch response:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
+            fetch('data/countries.geo.json')
+                .then(response => response.json())
                 .then(data => {
-                    console.log('Country GeoJSON loaded successfully');
                     // Create country layer
                     countryLayer = L.geoJSON(data, {
                         style: function(feature) {
@@ -361,13 +346,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Toggle province layer visibility
     function toggleProvinceLayer() {
-        const toggleButton = document.getElementById('toggleProvinceLayer');
+        if (!provinceLayer || !map) return;
         
-        if (!provinceLayer || !map) {
-            console.log('Province layer not ready yet');
-            toggleButton.textContent = 'Loading...';
-            return;
-        }
+        const toggleButton = document.getElementById('toggleProvinceLayer');
         
         if (isProvinceLayerVisible) {
             map.removeLayer(provinceLayer);
@@ -398,13 +379,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Toggle country layer visibility
     function toggleCountryLayer() {
-        const toggleButton = document.getElementById('toggleCountryLayer');
+        if (!countryLayer || !map) return;
         
-        if (!countryLayer || !map) {
-            console.log('Country layer not ready yet');
-            toggleButton.textContent = 'Loading...';
-            return;
-        }
+        const toggleButton = document.getElementById('toggleCountryLayer');
         
         if (isCountryLayerVisible) {
             map.removeLayer(countryLayer);
