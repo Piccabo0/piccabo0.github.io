@@ -101,7 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
             ]);
             
             // Load China provinces GeoJSON (but don't add to map yet)
-            fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+            // Using GitHub-hosted GeoJSON instead of Aliyun API to avoid CORS issues
+            fetch('https://raw.githubusercontent.com/longwosion/geojson-map-china/master/geometryProvince/100000_full.json')
                 .then(response => {
                     console.log('Province GeoJSON fetch response:', response.status);
                     if (!response.ok) {
