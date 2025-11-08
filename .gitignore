@@ -47,10 +47,6 @@ web_modules/
 # TypeScript cache
 *.tsbuildinfo
 
-# Astro
-dist
-.astro
-
 # Optional npm cache directory
 .npm
 
