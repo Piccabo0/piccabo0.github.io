@@ -102,8 +102,15 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Load China provinces GeoJSON (but don't add to map yet)
             fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
-                .then(response => response.json())
+                .then(response => {
+                    console.log('Province GeoJSON fetch response:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('Province GeoJSON loaded successfully');
                     // Create province layer
                     provinceLayer = L.geoJSON(data, {
                         style: function(feature) {
@@ -155,8 +162,15 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Load world countries GeoJSON
             fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
-                .then(response => response.json())
+                .then(response => {
+                    console.log('Country GeoJSON fetch response:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(data => {
+                    console.log('Country GeoJSON loaded successfully');
                     // Create country layer
                     countryLayer = L.geoJSON(data, {
                         style: function(feature) {
@@ -346,9 +360,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Toggle province layer visibility
     function toggleProvinceLayer() {
-        if (!provinceLayer || !map) return;
-        
         const toggleButton = document.getElementById('toggleProvinceLayer');
+        
+        if (!provinceLayer || !map) {
+            console.log('Province layer not ready yet');
+            toggleButton.textContent = 'Loading...';
+            return;
+        }
         
         if (isProvinceLayerVisible) {
             map.removeLayer(provinceLayer);
@@ -379,9 +397,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Toggle country layer visibility
     function toggleCountryLayer() {
-        if (!countryLayer || !map) return;
-        
         const toggleButton = document.getElementById('toggleCountryLayer');
+        
+        if (!countryLayer || !map) {
+            console.log('Country layer not ready yet');
+            toggleButton.textContent = 'Loading...';
+            return;
+        }
         
         if (isCountryLayerVisible) {
             map.removeLayer(countryLayer);
