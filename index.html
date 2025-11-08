@@ -9,7 +9,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-center h-12">
+                <div class="flex space-x-8">
+                    <a href="#home" class="text-sm font-medium text-gray-900 hover:text-gray-600 transition-colors duration-200">Home</a>
+                    <a href="#education" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Education</a>
+                    <a href="#experience" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Experience</a>
+                    <a href="#footprint" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Footprint</a>
+                    <a href="#honor" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Honor</a>
+                    <a href="#blogs" class="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors duration-200">Blogs</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="home" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 pt-12">
         <div class="text-center">
             <h1 class="text-6xl font-bold text-gray-800 mb-4">
                 Hi!
@@ -19,5 +36,40 @@
             </h2>
         </div>
     </main>
+
+    <!-- Education Section -->
+    <section id="education" class="min-h-screen flex items-center justify-center bg-white">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-gray-800">Education</h2>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="min-h-screen flex items-center justify-center bg-gray-50">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-gray-800">Experience</h2>
+        </div>
+    </section>
+
+    <!-- Footprint Section -->
+    <section id="footprint" class="min-h-screen flex items-center justify-center bg-white">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-gray-800">Footprint</h2>
+        </div>
+    </section>
+
+    <!-- Honor Section -->
+    <section id="honor" class="min-h-screen flex items-center justify-center bg-gray-50">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-gray-800">Honor</h2>
+        </div>
+    </section>
+
+    <!-- Blogs Section -->
+    <section id="blogs" class="min-h-screen flex items-center justify-center bg-white">
+        <div class="text-center">
+            <h2 class="text-4xl font-bold text-gray-800">Blogs</h2>
+        </div>
+    </section>
 </body>
 </html>
