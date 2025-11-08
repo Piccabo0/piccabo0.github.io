@@ -7,6 +7,18 @@
     <title>Piccaboo</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <!-- Flag Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"/>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -14,20 +26,20 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-center h-12">
                 <div class="flex space-x-8">
-                    <a href="#home" class="text-sm font-medium text-white hover:text-gray-300 transition-colors duration-200">Home</a>
-                    <a href="#education" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Education</a>
-                    <a href="#experience" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Experience</a>
-                    <a href="#project" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Project</a>
-                    <a href="#footprint" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Footprint</a>
-                    <a href="#honor" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Honor</a>
-                    <a href="#blogs" class="text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200">Blogs</a>
+                    <a href="#home" class="nav-link text-sm font-medium text-white hover:text-gray-300 transition-colors duration-200" data-page="home">Home</a>
+                    <a href="#education" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="education">Education</a>
+                    <a href="#experience" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="experience">Experience</a>
+                    <a href="#project" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="project">Project</a>
+                    <a href="#footprint" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="footprint">Footprint</a>
+                    <a href="#honor" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="honor">Honor</a>
+                    <a href="#blogs" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="blogs">Blogs</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main id="home" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-gray-100 pt-12">
+    <main id="home" class="page min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-gray-100 pt-12">
         <div class="relative">
             <!-- Decorative background elements -->
             <div class="absolute -top-20 -left-20 w-72 h-72 bg-slate-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
@@ -52,27 +64,9 @@
             </div>
         </div>
     </main>
-    
-    <style>
-        @keyframes blob {
-            0% { transform: translate(0px, 0px) scale(1); }
-            33% { transform: translate(30px, -50px) scale(1.1); }
-            66% { transform: translate(-20px, 20px) scale(0.9); }
-            100% { transform: translate(0px, 0px) scale(1); }
-        }
-        .animate-blob {
-            animation: blob 7s infinite;
-        }
-        .animation-delay-2000 {
-            animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-            animation-delay: 4s;
-        }
-    </style>
 
     <!-- Education Section -->
-    <section id="education" class="min-h-screen bg-white py-16">
+    <section id="education" class="page min-h-screen bg-white pt-20 pb-16" style="display: none;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Title -->
             <h2 class="text-5xl font-bold text-gray-800 mb-10">Education</h2>
@@ -155,7 +149,7 @@
     </section>
 
     <!-- Experience Section -->
-    <section id="experience" class="min-h-screen bg-gray-50 py-16">
+    <section id="experience" class="page min-h-screen bg-gray-50 pt-20 pb-16" style="display: none;">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Section Title -->
             <h2 class="text-5xl font-bold text-gray-800 mb-10">Experience</h2>
@@ -176,7 +170,7 @@
                             <div class="flex-1">
                                 <h3 class="text-2xl font-bold text-gray-800 mb-1">Microsoft Research Asia</h3>
                                 <h4 class="text-lg font-medium text-gray-700 mb-1">Spatial Intelligence Group</h4>
-                                <p class="text-gray-500 mb-3">Jun 2025 - Dec 2025</p>
+                                <p class="text-gray-500 mb-3">Jun 2025 - Present</p>
                                 <ul class="text-gray-600 space-y-1">
                                     <li>• Internship on advanced force control of robot arms</li>
                                     <li>• Visual-based task execution by manipulator, courier robot and AMR</li>
@@ -193,31 +187,66 @@
     </section>
 
     <!-- Project Section -->
-    <section id="project" class="min-h-screen flex items-center justify-center bg-white">
+    <section id="project" class="page min-h-screen flex items-center justify-center bg-white" style="display: none;">
         <div class="text-center">
             <h2 class="text-4xl font-bold text-gray-800">Project</h2>
         </div>
     </section>
 
     <!-- Footprint Section -->
-    <section id="footprint" class="min-h-screen flex items-center justify-center bg-gray-50">
-        <div class="text-center">
-            <h2 class="text-4xl font-bold text-gray-800">Footprint</h2>
+    <section id="footprint" class="page min-h-screen bg-gray-50 pt-20 pb-8" style="display: none;">
+        <div class="w-full px-6 h-full flex flex-col" style="height: calc(100vh - 7rem);">
+            <!-- Countries Visited Card -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Countries Visited</h3>
+                <div class="flex flex-wrap gap-4 items-center">
+                    <span class="fi fi-cn text-3xl"></span>
+                    <span class="fi fi-my text-3xl"></span>
+                    <span class="fi fi-vn text-3xl"></span>
+                    <span class="fi fi-az text-3xl"></span>
+                    <span class="fi fi-jp text-3xl"></span>
+                    <span class="fi fi-sg text-3xl"></span>
+                    <span class="fi fi-kz text-3xl"></span>
+                </div>
+            </div>
+            
+            <!-- Map Container -->
+            <div class="flex-1 bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+                <div id="map" style="width: 100%; height: 100%;"></div>
+            </div>
+            
+            <!-- Map Controls -->
+            <div class="bg-white rounded-lg shadow-md p-4">
+                <div class="flex justify-center gap-4">
+                    <button id="toggleProvinceLayer" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 text-sm font-medium shadow-sm">
+                        Show Provinces Overlay
+                    </button>
+                    <button id="toggleCountryLayer" class="px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors duration-200 text-sm font-medium shadow-sm">
+                        Show Countries Overlay
+                    </button>
+                    <button id="resetMapView" class="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 text-sm font-medium shadow-sm">
+                        Reset View
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Honor Section -->
-    <section id="honor" class="min-h-screen flex items-center justify-center bg-white">
+    <section id="honor" class="page min-h-screen flex items-center justify-center bg-white" style="display: none;">
         <div class="text-center">
             <h2 class="text-4xl font-bold text-gray-800">Honor</h2>
         </div>
     </section>
 
     <!-- Blogs Section -->
-    <section id="blogs" class="min-h-screen flex items-center justify-center bg-gray-50">
+    <section id="blogs" class="page min-h-screen flex items-center justify-center bg-gray-50" style="display: none;">
         <div class="text-center">
             <h2 class="text-4xl font-bold text-gray-800">Blogs</h2>
         </div>
     </section>
+
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
