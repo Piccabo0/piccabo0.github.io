@@ -306,7 +306,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Gansu
             L.marker([36.0611, 103.8343], {icon: smallIcon}).addTo(map); // Lanzhou
-
+            
+            // Ningxia
+            L.marker([38.4872, 106.2309], {icon: smallIcon}).addTo(map); // Yinchuan
+            L.marker([37.3213, 104.7763], {icon: smallIcon}).addTo(map); // Zhongwei
 
             // Tibet
             L.marker([29.6520, 91.1721], {icon: smallIcon}).addTo(map); // Lhasa
