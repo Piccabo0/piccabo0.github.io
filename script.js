@@ -309,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Ningxia
             L.marker([38.4872, 106.2309], {icon: smallIcon}).addTo(map); // Yinchuan
-            L.marker([37.3213, 104.7763], {icon: smallIcon}).addTo(map); // Zhongwei
+            L.marker([37.4980, 105.2078], {icon: smallIcon}).addTo(map); // Zhongwei
 
             // Tibet
             L.marker([29.6520, 91.1721], {icon: smallIcon}).addTo(map); // Lhasa
