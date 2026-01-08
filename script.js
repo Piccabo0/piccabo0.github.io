@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 '\u5e7f\u897f\u58ee\u65cf\u81ea\u6cbb\u533a', '\u6d77\u5357\u7701', 
                 '\u7518\u8083\u7701', '\u5b81\u590f\u56de\u65cf\u81ea\u6cbb\u533a', 
                 '\u897f\u85cf\u81ea\u6cbb\u533a', 
-                '\u65b0\u7586\u7ef4\u543e\u5c14\u81ea\u6cbb\u533a'
+                '\u65b0\u7586\u7ef4\u543e\u5c14\u81ea\u6cbb\u533a', '\u4e91\u5357\u7701'
             ]);
             
             // List of countries visited (English names as they appear in GeoJSON)
