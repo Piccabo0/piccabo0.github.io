@@ -249,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Fujian
             L.marker([26.0745, 119.2965], {icon: smallIcon}).addTo(map); // Fuzhou
+            L.marker([25.4780, 119.7750], {icon: smallIcon}).addTo(map); // Pingtan
 
             // Sichuan
             L.marker([30.5728, 104.0668], {icon: smallIcon}).addTo(map); // Chengdu
@@ -322,6 +323,12 @@ document.addEventListener('DOMContentLoaded', function() {
             L.marker([43.2623, 80.8303], {icon: smallIcon}).addTo(map); // Zhaosu County
             L.marker([43.2128, 81.8380], {icon: smallIcon}).addTo(map); // Tekesi County
             L.marker([44.1973, 80.4078], {icon: smallIcon}).addTo(map); // Khogors
+
+            // Yunnan
+            // Kunming
+            L.marker([25.0389, 102.7183], {icon: smallIcon}).addTo(map); // Kunming
+            L.marker([25.4855, 100.2230], {icon: smallIcon}).addTo(map); // Dali
+            L.marker([26.8721, 100.2345], {icon: smallIcon}).addTo(map); // Lijiang
 
             // ==============================International Locations==============================
             // Singapore
