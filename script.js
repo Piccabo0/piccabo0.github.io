@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 '\u5e7f\u897f\u58ee\u65cf\u81ea\u6cbb\u533a', '\u6d77\u5357\u7701', 
                 '\u7518\u8083\u7701', '\u5b81\u590f\u56de\u65cf\u81ea\u6cbb\u533a', 
                 '\u897f\u85cf\u81ea\u6cbb\u533a', 
-                '\u65b0\u7586\u7ef4\u543e\u5c14\u81ea\u6cbb\u533a'
+                '\u65b0\u7586\u7ef4\u543e\u5c14\u81ea\u6cbb\u533a', '\u4e91\u5357\u7701'
             ]);
             
             // List of countries visited (English names as they appear in GeoJSON)
@@ -249,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Fujian
             L.marker([26.0745, 119.2965], {icon: smallIcon}).addTo(map); // Fuzhou
+            L.marker([25.4780, 119.7750], {icon: smallIcon}).addTo(map); // Pingtan
 
             // Sichuan
             L.marker([30.5728, 104.0668], {icon: smallIcon}).addTo(map); // Chengdu
@@ -327,6 +328,12 @@ document.addEventListener('DOMContentLoaded', function() {
             L.marker([43.2623, 80.8303], {icon: smallIcon}).addTo(map); // Zhaosu County
             L.marker([43.2128, 81.8380], {icon: smallIcon}).addTo(map); // Tekesi County
             L.marker([44.1973, 80.4078], {icon: smallIcon}).addTo(map); // Khogors
+
+            // Yunnan
+            // Kunming
+            L.marker([25.0389, 102.7183], {icon: smallIcon}).addTo(map); // Kunming
+            L.marker([25.4855, 100.2230], {icon: smallIcon}).addTo(map); // Dali
+            L.marker([26.8721, 100.2345], {icon: smallIcon}).addTo(map); // Lijiang
 
             // ==============================International Locations==============================
             // Singapore
