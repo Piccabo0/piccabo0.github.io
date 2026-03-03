@@ -211,6 +211,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Tianjin
             L.marker([39.0915, 117.2007], {icon: smallIcon}).addTo(map); // Tianjin
+            L.marker([39.0027, 117.7033], {icon: smallIcon}).addTo(map); // Binhaixinqu
 
             // Hebei
             L.marker([38.0428, 114.5149], {icon: smallIcon}).addTo(map); // Shijiazhuang
@@ -223,13 +224,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Shandong
             L.marker([36.0671, 120.3826], {icon: smallIcon}).addTo(map); // Qingdao
+            L.marker([35.9694, 120.1916], {icon: smallIcon}).addTo(map); // Huangdaoqu
             L.marker([36.6494, 117.1328], {icon: smallIcon}).addTo(map); // Jinan
             L.marker([37.4638, 121.4486], {icon: smallIcon}).addTo(map); // Yantai
             L.marker([37.8123, 120.7577], {icon: smallIcon}).addTo(map); // Penglai
             L.marker([37.6425, 120.4794], {icon: smallIcon}).addTo(map); // Longkou
             L.marker([35.0653, 118.3426], {icon: smallIcon}).addTo(map); // Linyi
+            L.marker([34.9205, 118.6574], {icon: smallIcon}).addTo(map); // Linshuxian
+            L.marker([35.1807, 118.8472], {icon: smallIcon}).addTo(map); // Junanxian
             L.marker([36.7069, 119.1618], {icon: smallIcon}).addTo(map); // Weifang
+            L.marker([36.8607, 118.7796], {icon: smallIcon}).addTo(map); // Shouguang
+            L.marker([36.6808, 118.4753], {icon: smallIcon}).addTo(map); // Qingzhou
             L.marker([37.5138, 122.1215], {icon: smallIcon}).addTo(map); // Weihai
+            L.marker([36.3069, 116.5779], {icon: smallIcon}).addTo(map); // Taian
 
             // Henan
             L.marker([34.6197, 112.4540], {icon: smallIcon}).addTo(map); // Luoyang
