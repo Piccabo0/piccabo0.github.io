@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 '\u5e7f\u4e1c\u7701', '\u798f\u5efa\u7701', 
                 '\u56db\u5ddd\u7701', '\u91cd\u5e86\u5e02', '\u6c5f\u82cf\u7701', 
                 '\u9655\u897f\u7701', '\u6d59\u6c5f\u7701', 
-                '\u6c5f\u897f\u7701', '\u5b89\u5fbd\u7701', '\u6e56\u5357\u7701', 
+                '\u6c5f\u897f\u7701', '\u5b89\u5fbd\u7701', '\u6e56\u5317\u7701', '\u6e56\u5357\u7701', 
                 '\u8fbd\u5b81\u7701', '\u5409\u6797\u7701', 
                 '\u9ed1\u9f99\u6c5f\u7701', '\u8d35\u5dde\u7701', 
                 '\u5e7f\u897f\u58ee\u65cf\u81ea\u6cbb\u533a', '\u6d77\u5357\u7701', 
@@ -267,6 +267,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Jiangsu
             L.marker([32.0603, 118.7969], {icon: smallIcon}).addTo(map); // Nanjing
             L.marker([31.2989, 120.5853], {icon: smallIcon}).addTo(map); // Suzhou
+            L.marker([32.3924, 119.4133], {icon: smallIcon}).addTo(map);// yangzhou
+            L.marker([32.7817, 119.4563], {icon: smallIcon}).addTo(map);// gaoyou
 
             // Shaanxi
             L.marker([34.3416, 108.9398], {icon: smallIcon}).addTo(map); // Xi'an
@@ -285,6 +287,9 @@ document.addEventListener('DOMContentLoaded', function() {
             L.marker([31.8612, 117.2857], {icon: smallIcon}).addTo(map); // Hefei
             L.marker([29.9108, 117.9496], {icon: smallIcon}).addTo(map); // Yi county
             L.marker([29.7018, 118.3493], {icon: smallIcon}).addTo(map); // Huangshan
+            
+            // Hubei
+            L.marker([30.5987, 114.3112], {icon: smallIcon}).addTo(map); // Huangshan
 
             // Hunan
             L.marker([28.2282, 112.9388], {icon: smallIcon}).addTo(map); // Changsha
