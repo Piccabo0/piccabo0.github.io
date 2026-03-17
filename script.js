@@ -221,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Inner Mongolia
             L.marker([42.4858, 117.2833], {icon: smallIcon}).addTo(map); // Wulanbutong
+            L.marker([40.8422, 111.7564], {icon: smallIcon}).addTo(map); // Hohhot
 
             // Shandong
             L.marker([36.0671, 120.3826], {icon: smallIcon}).addTo(map); // Qingdao
@@ -236,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
             L.marker([36.8607, 118.7796], {icon: smallIcon}).addTo(map); // Shouguang
             L.marker([36.6808, 118.4753], {icon: smallIcon}).addTo(map); // Qingzhou
             L.marker([37.5138, 122.1215], {icon: smallIcon}).addTo(map); // Weihai
-            L.marker([36.3069, 116.5779], {icon: smallIcon}).addTo(map); // Taian
+            L.marker([36.1980, 117.0923], {icon: smallIcon}).addTo(map); // Taian
 
             // Henan
             L.marker([34.6197, 112.4540], {icon: smallIcon}).addTo(map); // Luoyang
