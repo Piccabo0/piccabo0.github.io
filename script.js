@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Henan
             L.marker([34.6197, 112.4540], {icon: smallIcon}).addTo(map); // Luoyang
-
+            L.marker([35.3093, 113.9221], {icon: smallIcon}).addTo(map); // Xinxiang
             // Shanghai
             L.marker([31.2304, 121.4737], {icon: smallIcon}).addTo(map); // Shanghai
 
