@@ -97,9 +97,9 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // List of countries visited (English names as they appear in GeoJSON)
             const visitedCountries = new Set([
-                'China', 'Malaysia', 'Vietnam', 'Azerbaijan', 'Japan', 'Singapore', 'Kazakhstan'
+                'China', 'Malaysia', 'Vietnam', 'Azerbaijan', 'Japan', 'Singapore', 'Kazakhstan', 'Australia'
             ]);
-            
+                        
             // Load China provinces GeoJSON (but don't add to map yet)
             fetch('data/china-provinces.json')
                 .then(response => response.json())
@@ -362,6 +362,9 @@ document.addEventListener('DOMContentLoaded', function() {
             L.marker([40.4093, 49.8671], {icon: smallIcon}).addTo(map); // Baku
             // Kazakhstan
             L.marker([44.1759, 80.0055], {icon: smallIcon}).addTo(map); // Jarkent
+            // Australia
+            L.marker([-33.8688, 151.2093], {icon: smallIcon}).addTo(map); // Sydney
+            L.marker([-37.8136, 144.9631], {icon: smallIcon}).addTo(map); // Melbourne
         } catch (error) {
             console.error('Error initializing map:', error);
         }
