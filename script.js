@@ -456,6 +456,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (pageId === 'footprint') {
             setTimeout(initMap, 150);
         }
+        
+        // Initialize CesiumJS map when showing footprints page
+        if (pageId === 'footprints' && typeof initCesiumMap === 'function') {
+            setTimeout(initCesiumMap, 150);
+        }
     };
     
     // Handle initial page load and browser back/forward

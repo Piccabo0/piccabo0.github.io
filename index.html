@@ -15,8 +15,12 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
+    <!-- CesiumJS -->
+    <script src="https://unpkg.com/cesium/Build/Cesium/Cesium.js"></script>
     <!-- Flag Icons CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"/>
+    <!-- CesiumJS CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/cesium/Build/Cesium/Widgets/widgets.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -31,6 +35,7 @@
                     <a href="#experience" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="experience">Experience</a>
                     <a href="#project" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="project">Project</a>
                     <a href="#footprint" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="footprint">Footprint</a>
+                    <a href="#footprints" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="footprints">Footprints 3D</a>
                     <a href="#blogs" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="blogs">Blogs</a>
                 </div>
             </div>
@@ -232,6 +237,29 @@
         </div>
     </section>
 
+    <!-- Footprints 3D Section -->
+    <section id="footprints" class="page min-h-screen bg-gray-900 pt-20 pb-8" style="display: none;">
+        <div class="w-full px-6 h-full flex flex-col" style="height: calc(100vh - 7rem);">
+            <!-- CesiumJS Viewer Container -->
+            <div id="cesiumContainer" class="flex-1 bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-6" style="width: 100%; height: 100%;"></div>
+            
+            <!-- Controls Panel -->
+            <div class="bg-gray-800 rounded-lg shadow-md p-4 border border-gray-700">
+                <div class="flex justify-between items-center flex-wrap gap-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-white mb-2">3D Footprints Map</h3>
+                        <p class="text-sm text-gray-300">Explore visited locations in 3D</p>
+                    </div>
+                    <div class="flex gap-3 flex-wrap">
+                        <button id="resetView3D" class="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200 text-sm font-medium shadow-sm">
+                            Reset View
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Blogs Section -->
     <section id="blogs" class="page min-h-screen flex items-center justify-center bg-gray-50" style="display: none;">
         <div class="text-center">
@@ -241,5 +269,6 @@
 
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
+    <script src="footprints.js"></script>
 </body>
 </html>
