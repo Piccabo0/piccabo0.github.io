@@ -178,23 +178,23 @@ function updateCityLabelFontSize() {
     // 根据相机距离计算字体大小
     // 放大时（靠近）字体缩小，缩小时（远离）字体放大
     let fontSize = 12;
-    let pixelOffset = 20;
+    let pixelOffset = 12;
     
     if (height < 2000000) {
         fontSize = 9;       // 放大时字体缩小（靠得近，不需要太大）
-        pixelOffset = 17;
+        pixelOffset = 9;
     } else if (height < 5000000) {
         fontSize = 10;
-        pixelOffset = 18;
+        pixelOffset = 10;
     } else if (height < 12000000) {
         fontSize = 12;
-        pixelOffset = 20;
+        pixelOffset = 11;
     } else if (height < 20000000) {
         fontSize = 14;
-        pixelOffset = 21;
+        pixelOffset = 12;
     } else {
         fontSize = 16;      // 缩小时字体放大（距离远，需要更大才能看清）
-        pixelOffset = 22;
+        pixelOffset = 13;
     }
     
     visitedCityEntities.forEach(entity => {
@@ -215,12 +215,11 @@ function addVisitedCityMarkers() {
     visitedCities.forEach(city => {
         const entity = cesiumViewer.entities.add({
             position: Cesium.Cartesian3.fromDegrees(city.longitude, city.latitude, 0),
-            point: {
-                pixelSize: 7,
-                color: Cesium.Color.fromCssColorString('#FF9800'),
-                outlineColor: Cesium.Color.WHITE,
-                outlineWidth: 1,
-                heightReference: Cesium.HeightReference.NONE
+            billboard: {
+                image: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-orange.png',
+                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                heightReference: Cesium.HeightReference.NONE,
+                scale: 0.25
             },
             label: {
                 text: city.name,
@@ -229,8 +228,8 @@ function addVisitedCityMarkers() {
                 outlineColor: Cesium.Color.BLACK,
                 outlineWidth: 2,
                 style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                pixelOffset: new Cesium.Cartesian2(0, 20),
+                verticalOrigin: Cesium.VerticalOrigin.TOP,
+                pixelOffset: new Cesium.Cartesian2(0, 25),
                 disableDepthTestDistance: 0,
                 scaleByDistance: new Cesium.NearFarScalar(1000000, 1.0, 25000000, 0.4)
             },
