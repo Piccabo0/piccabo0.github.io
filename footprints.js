@@ -18,7 +18,7 @@ function initCesiumMap() {
         cesiumViewer = new Cesium.Viewer('cesiumContainer', {
             animation: false,
             baseLayerPicker: false,
-            fullscreenButton: true,
+            fullscreenButton: false,
             geocoder: false,
             homeButton: false,
             infoBox: true,
@@ -28,6 +28,9 @@ function initCesiumMap() {
             navigationHelpButton: false,
             navigationInstructionsInitiallyVisible: false
         });
+
+        // Hide credit information
+        cesiumViewer.creditDisplay.container.style.display = 'none';
 
         cesiumViewer.camera.flyTo({
             destination: Cesium.Cartesian3.fromDegrees(104.1954, 35.8617, 20000000),
@@ -46,7 +49,6 @@ function initCesiumMap() {
 
 function setupControlButtons() {
     const resetViewBtn = document.getElementById('resetView3D');
-    const toggleBoundariesBtn = document.getElementById('toggleBoundaries3D');
 
     if (resetViewBtn) {
         resetViewBtn.addEventListener('click', function() {
@@ -58,17 +60,6 @@ function setupControlButtons() {
                 destination: Cesium.Cartesian3.fromDegrees(104.1954, 35.8617, 20000000),
                 duration: 1.5
             });
-        });
-    }
-
-    if (toggleBoundariesBtn) {
-        toggleBoundariesBtn.addEventListener('click', function() {
-            const isVisible = toggleCountryBoundaries();
-            toggleBoundariesBtn.textContent = `Boundaries: ${isVisible ? 'ON' : 'OFF'}`;
-            toggleBoundariesBtn.classList.toggle('bg-blue-600', isVisible);
-            toggleBoundariesBtn.classList.toggle('bg-gray-600', !isVisible);
-            toggleBoundariesBtn.classList.toggle('hover:bg-blue-700', isVisible);
-            toggleBoundariesBtn.classList.toggle('hover:bg-gray-700', !isVisible);
         });
     }
 }
@@ -86,24 +77,6 @@ function clearVisitedCityMarkers() {
 }
 
 /**
- * Calculate the geographic center (centroid) of coordinates
- */
-function calculateGeometryCenter(coords) {
-    if (!Array.isArray(coords) || coords.length === 0) return null;
-
-    let latSum = 0, lonSum = 0;
-    coords.forEach(coord => {
-        lonSum += coord[0];
-        latSum += coord[1];
-    });
-
-    return {
-        longitude: lonSum / coords.length,
-        latitude: latSum / coords.length
-    };
-}
-
-/**
  * Draw line segments from array of coordinates
  */
 function drawLineFromCoordinates(coords) {
@@ -117,7 +90,7 @@ function drawLineFromCoordinates(coords) {
         const entity = cesiumViewer.entities.add({
             polyline: {
                 positions: positions,
-                width: 1.5,
+                width: 2,
                 material: Cesium.Color.WHITE,
                 clampToGround: true,
                 arcType: Cesium.ArcType.GEODESIC
@@ -133,104 +106,7 @@ function drawLineFromCoordinates(coords) {
 }
 
 /**
- * Add country name label at specified location
- */
-function addCountryLabel(countryName, longitude, latitude) {
-    if (!countryName || !cesiumViewer) return;
-
-    try {
-        const entity = cesiumViewer.entities.add({
-            position: Cesium.Cartesian3.fromDegrees(longitude, latitude),
-            label: {
-                text: countryName,
-                font: '16px sans-serif',
-                fillColor: Cesium.Color.WHITE,
-                outlineColor: Cesium.Color.BLACK,
-                outlineWidth: 2,
-                style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-                verticalOrigin: Cesium.VerticalOrigin.CENTER,
-                horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
-                pixelOffset: new Cesium.Cartesian2(0, 0),
-                disableDepthTestDistance: 0,
-                scaleByDistance: new Cesium.NearFarScalar(1500000, 1.0, 30000000, 0.3)
-            }
-        });
-
-        if (entity) {
-            boundaryEntities.push(entity);
-        }
-    } catch (e) {
-        console.warn('Error adding country label:', e);
-    }
-}
-
-/**
- * Process GeoJSON and extract boundary lines with country names
- */
-function processGeoJSON(geojson) {
-    if (!geojson || !geojson.features) return 0;
-
-    let lineCount = 0;
-
-    geojson.features.forEach(feature => {
-        if (!feature.geometry) return;
-
-        const geometry = feature.geometry;
-        const countryName = feature.properties?.name || 'Unknown';
-
-        try {
-            if (geometry.type === 'LineString') {
-                drawLineFromCoordinates(geometry.coordinates);
-                const center = calculateGeometryCenter(geometry.coordinates);
-                if (center) {
-                    addCountryLabel(countryName, center.longitude, center.latitude);
-                }
-                lineCount++;
-            } else if (geometry.type === 'MultiLineString') {
-                let allCoords = [];
-                geometry.coordinates.forEach(lineCoords => {
-                    drawLineFromCoordinates(lineCoords);
-                    allCoords = allCoords.concat(lineCoords);
-                    lineCount++;
-                });
-                const center = calculateGeometryCenter(allCoords);
-                if (center && allCoords.length > 0) {
-                    addCountryLabel(countryName, center.longitude, center.latitude);
-                }
-            } else if (geometry.type === 'Polygon') {
-                // Draw outer ring of polygon as boundary
-                if (geometry.coordinates[0]) {
-                    drawLineFromCoordinates(geometry.coordinates[0]);
-                    const center = calculateGeometryCenter(geometry.coordinates[0]);
-                    if (center) {
-                        addCountryLabel(countryName, center.longitude, center.latitude);
-                    }
-                    lineCount++;
-                }
-            } else if (geometry.type === 'MultiPolygon') {
-                let allCoords = [];
-                geometry.coordinates.forEach(polygon => {
-                    if (polygon[0]) {
-                        drawLineFromCoordinates(polygon[0]);
-                        allCoords = allCoords.concat(polygon[0]);
-                        lineCount++;
-                    }
-                });
-                const center = calculateGeometryCenter(allCoords);
-                if (center && allCoords.length > 0) {
-                    addCountryLabel(countryName, center.longitude, center.latitude);
-                }
-            }
-        } catch (e) {
-            console.warn('Error processing feature geometry:', e);
-        }
-    });
-
-    return lineCount;
-}
-
-/**
- * Load country boundaries from local GeoJSON file
+ * Load country boundaries from local Natural Earth boundaries lines data
  */
 function loadCountryBoundaries() {
     if (!showCountryBoundaries || !cesiumViewer) return;
@@ -239,9 +115,10 @@ function loadCountryBoundaries() {
     boundaryEntities.forEach(entity => cesiumViewer.entities.remove(entity));
     boundaryEntities = [];
 
-    console.log('Loading country boundaries from local file...');
+    console.log('Loading country boundary lines from local file...');
 
-    fetch('data/countries.geo.json')
+    // Use boundaries lines (international borders only)
+    fetch('data/boundary_lines_50m.geojson')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
@@ -249,17 +126,29 @@ function loadCountryBoundaries() {
             return response.json();
         })
         .then(data => {
-            console.log('Successfully loaded country boundaries');
+            console.log('Successfully loaded country boundary lines');
             
             if (data.features) {
-                const lineCount = processGeoJSON(data);
-                console.log(`✓ Loaded ${lineCount} country boundary lines`);
+                let lineCount = 0;
+                // Each feature in this dataset is a boundary LINE (not polygon)
+                data.features.forEach(feature => {
+                    if (feature.geometry && feature.geometry.type === 'LineString') {
+                        drawLineFromCoordinates(feature.geometry.coordinates);
+                        lineCount++;
+                    } else if (feature.geometry && feature.geometry.type === 'MultiLineString') {
+                        feature.geometry.coordinates.forEach(coords => {
+                            drawLineFromCoordinates(coords);
+                            lineCount++;
+                        });
+                    }
+                });
+                console.log(`✓ Loaded ${lineCount} international boundary lines`);
             } else {
                 throw new Error('No features found in GeoJSON');
             }
         })
         .catch(error => {
-            console.error('Error loading country boundaries:', error);
+            console.error('Error loading boundary lines from local file:', error);
         });
 }
 
@@ -280,6 +169,42 @@ function toggleCountryBoundaries() {
     return showCountryBoundaries;
 }
 
+function updateCityLabelFontSize() {
+    if (!cesiumViewer || visitedCityEntities.length === 0) return;
+
+    const camera = cesiumViewer.camera;
+    const height = Cesium.Cartesian3.distance(camera.position, cesiumViewer.scene.globe.ellipsoid.cartographicToCartesian(Cesium.Cartographic.ZERO));
+    
+    // 根据相机距离计算字体大小
+    // 放大时（靠近）字体缩小，缩小时（远离）字体放大
+    let fontSize = 12;
+    let pixelOffset = 20;
+    
+    if (height < 2000000) {
+        fontSize = 9;       // 放大时字体缩小（靠得近，不需要太大）
+        pixelOffset = 17;
+    } else if (height < 5000000) {
+        fontSize = 10;
+        pixelOffset = 18;
+    } else if (height < 12000000) {
+        fontSize = 12;
+        pixelOffset = 20;
+    } else if (height < 20000000) {
+        fontSize = 14;
+        pixelOffset = 21;
+    } else {
+        fontSize = 16;      // 缩小时字体放大（距离远，需要更大才能看清）
+        pixelOffset = 22;
+    }
+    
+    visitedCityEntities.forEach(entity => {
+        if (entity.label) {
+            entity.label.font = fontSize + 'px sans-serif';
+            entity.label.pixelOffset = new Cesium.Cartesian2(0, pixelOffset);
+        }
+    });
+}
+
 function addVisitedCityMarkers() {
     if (!cesiumViewer || visitedCities.length === 0) {
         return;
@@ -291,10 +216,10 @@ function addVisitedCityMarkers() {
         const entity = cesiumViewer.entities.add({
             position: Cesium.Cartesian3.fromDegrees(city.longitude, city.latitude, 0),
             point: {
-                pixelSize: 8,
-                color: Cesium.Color.fromCssColorString('#1a73e8'),
+                pixelSize: 7,
+                color: Cesium.Color.fromCssColorString('#FF9800'),
                 outlineColor: Cesium.Color.WHITE,
-                outlineWidth: 2,
+                outlineWidth: 1,
                 heightReference: Cesium.HeightReference.NONE
             },
             label: {
@@ -305,15 +230,18 @@ function addVisitedCityMarkers() {
                 outlineWidth: 2,
                 style: Cesium.LabelStyle.FILL_AND_OUTLINE,
                 verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-                pixelOffset: new Cesium.Cartesian2(0, 12),
+                pixelOffset: new Cesium.Cartesian2(0, 20),
                 disableDepthTestDistance: 0,
-                scaleByDistance: new Cesium.NearFarScalar(1500000, 1.0, 12000000, 0.6)
+                scaleByDistance: new Cesium.NearFarScalar(1000000, 1.0, 25000000, 0.4)
             },
             description: `<p><strong>${city.name}</strong></p><p>Latitude: ${city.latitude.toFixed(4)}°</p><p>Longitude: ${city.longitude.toFixed(4)}°</p>`
         });
 
         visitedCityEntities.push(entity);
     });
+    
+    // 初始化一次字体大小
+    updateCityLabelFontSize();
 }
 
 function loadVisitedCitiesFromJson() {
@@ -364,3 +292,19 @@ window.addEventListener('resize', function() {
         cesiumViewer.resize();
     }
 });
+
+// 监听相机移动，动态调整城市标签字体大小
+if (typeof Cesium !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', function() {
+        let updateTimer = null;
+        if (cesiumViewer && cesiumViewer.camera) {
+            cesiumViewer.camera.moveEnd.addEventListener(function() {
+                // 防抖处理，避免频繁更新
+                clearTimeout(updateTimer);
+                updateTimer = setTimeout(function() {
+                    updateCityLabelFontSize();
+                }, 100);
+            });
+        }
+    });
+}
