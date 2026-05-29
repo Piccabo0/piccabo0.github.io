@@ -22,6 +22,18 @@ let showVisitedCountries = false;
 // Add variable for sidebar collapsed state
 let flagsSidebarCollapsed = true;
 
+// Country code mapping for flag-icons library
+const COUNTRY_CODE_MAP = {
+    'China': 'cn',
+    'Singapore': 'sg',
+    'Malaysia': 'my',
+    'Vietnam': 'vn',
+    'Japan': 'jp',
+    'Azerbaijan': 'az',
+    'Kazakhstan': 'kz',
+    'Australia': 'au'
+};
+
 // Set Cesium Ion Access Token
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZTc2Yzg3Ny0xZDEzLTRhMjItYTc1MS03MGU1Mjk5ZDY2YTMiLCJpZCI6NDM0NjI5LCJzdWIiOiJQaWNjYWJvbyIsImlzcyI6Imh0dHBzOi8vaW9uLmNlc2l1bS5jb20iLCJhdWQiOiJNeVRva2VuIiwiaWF0IjoxNzc5MzY1Mjk4fQ.mpN9JH1ltXPounHE-42giykKbFgvFgoMkDncCEhYCok';
 
@@ -67,6 +79,7 @@ function initCesiumMap() {
         loadProvinceBoundaries();
         loadVisitedCitiesFromJson();
         loadBackgroundLabelLayer();
+        loadVisitedCountriesFlags();
         adjustMouseWheelZoomSpeed();
 
         cesiumInitialized = true;
@@ -751,4 +764,75 @@ function toggleFlagsSidebar() {
     }
     
     console.log(`Flags sidebar: ${flagsSidebarCollapsed ? 'COLLAPSED' : 'EXPANDED'}`);
+}
+
+/**
+ * Load visited countries flags from JSON and display in sidebar
+ */
+function loadVisitedCountriesFlags() {
+    const flagsContainer = document.getElementById('flagsSidebarContainer');
+    if (!flagsContainer) return;
+
+    // Clear existing flags
+    flagsContainer.innerHTML = '';
+
+    // Load visited countries JSON
+    fetch('data/00_visited_countries.json')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Failed to load visited countries JSON: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            const countries = data.countries || [];
+            
+            if (countries.length === 0) {
+                console.log('No visited countries found');
+                return;
+            }
+
+            // Create flag items for each visited country
+            countries.forEach(country => {
+                const countryName = country.name || '';
+                const countryYear = country.year || '';
+                const countryCode = COUNTRY_CODE_MAP[countryName];
+
+                if (countryCode) {
+                    // Create flag item wrapper
+                    const flagItem = document.createElement('div');
+                    flagItem.className = 'flag-item';
+                    flagItem.setAttribute('data-year', countryYear);
+                    flagItem.title = `${countryName} (${countryYear})`;
+
+                    // Create content wrapper
+                    const contentWrapper = document.createElement('div');
+                    contentWrapper.className = 'flag-item-content';
+
+                    // Create flag icon using flag-icons library
+                    const flagIcon = document.createElement('span');
+                    flagIcon.className = `fi fi-${countryCode} flag-icon-large`;
+
+                    // Create country name label
+                    const nameLabel = document.createElement('div');
+                    nameLabel.className = 'flag-name';
+                    nameLabel.textContent = countryName;
+
+                    // Append to content wrapper
+                    contentWrapper.appendChild(flagIcon);
+                    contentWrapper.appendChild(nameLabel);
+
+                    // Append content wrapper to flag item
+                    flagItem.appendChild(contentWrapper);
+
+                    // Append to container
+                    flagsContainer.appendChild(flagItem);
+                } else {
+                    console.warn(`Country code not found for: ${countryName}`);
+                }
+            });
+
+            console.log(`✓ Loaded ${countries.length} visited country flags`);
+        })
+        .catch(error => console.error('Error loading visited countries flags:', error));
 }
