@@ -46,3 +46,76 @@
 .cesium-viewer-cesiumWidgetContainer {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
+
+/* Collapsible Flags Sidebar Panel */
+.flags-sidebar-panel {
+    border-radius: 0 12px 12px 0;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+#flagsSidebarContainer {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+#flagsSidebarContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+#flagsSidebarContainer::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#flagsSidebarContainer::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+#flagsSidebarContainer::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Toggle Button Styles */
+.flags-toggle-btn {
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+.flags-toggle-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+.flag-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.flag-item:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.flag-icon-large {
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.flag-name {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-align: center;
+    margin-top: 4px;
+    word-break: break-word;
+    max-width: 100%;
+}

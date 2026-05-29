@@ -11,6 +11,17 @@ let provinceBoundaryDataSource = null;
 let labelLayer = null;
 let showBackgroundLabels = true;
 
+// Add variables for visited provinces overlay
+let visitedProvinceDataSource = null;
+let showVisitedProvinces = false;
+
+// Add variables for visited countries overlay
+let visitedCountryDataSource = null;
+let showVisitedCountries = false;
+
+// Add variable for sidebar collapsed state
+let flagsSidebarCollapsed = true;
+
 // Set Cesium Ion Access Token
 Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZTc2Yzg3Ny0xZDEzLTRhMjItYTc1MS03MGU1Mjk5ZDY2YTMiLCJpZCI6NDM0NjI5LCJzdWIiOiJQaWNjYWJvbyIsImlzcyI6Imh0dHBzOi8vaW9uLmNlc2l1bS5jb20iLCJhdWQiOiJNeVRva2VuIiwiaWF0IjoxNzc5MzY1Mjk4fQ.mpN9JH1ltXPounHE-42giykKbFgvFgoMkDncCEhYCok';
 
@@ -120,6 +131,14 @@ function adjustMouseWheelZoomSpeed() {
 }
 
 function setupControlButtons() {
+    // Setup toggle sidebar button
+    const toggleSidebarBtn = document.getElementById('toggleFlagsSidebar');
+    if (toggleSidebarBtn) {
+        toggleSidebarBtn.addEventListener('click', function() {
+            toggleFlagsSidebar();
+        });
+    }
+
     const resetViewBtn = document.getElementById('resetView3D');
 
     if (resetViewBtn) {
@@ -132,6 +151,62 @@ function setupControlButtons() {
                 destination: Cesium.Cartesian3.fromDegrees(104.1954, 35.8617, 20000000),
                 duration: 1.5
             });
+        });
+    }
+
+    // Create or get button container
+    let btnContainer = document.getElementById('footprintsBtnContainer');
+    if (btnContainer) {
+        // Create toggle button for visited provinces with symbol
+        let toggleProvincesBtn = document.getElementById('toggleVisitedProvincesBtn');
+        if (!toggleProvincesBtn) {
+            toggleProvincesBtn = document.createElement('button');
+            toggleProvincesBtn.id = 'toggleVisitedProvincesBtn';
+            toggleProvincesBtn.type = 'button';
+            toggleProvincesBtn.title = 'Show/Hide Visited Provinces';
+            toggleProvincesBtn.innerText = '🗺️';
+            Object.assign(toggleProvincesBtn.style, {
+                padding: '8px 10px',
+                background: '#4b5563',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                fontSize: '18px',
+                transition: 'background-color 0.2s'
+            });
+            btnContainer.appendChild(toggleProvincesBtn);
+        }
+
+        toggleProvincesBtn.addEventListener('click', function() {
+            toggleVisitedProvinces();
+        });
+
+        // Create toggle button for visited countries with symbol
+        let toggleCountriesBtn = document.getElementById('toggleVisitedCountriesBtn');
+        if (!toggleCountriesBtn) {
+            toggleCountriesBtn = document.createElement('button');
+            toggleCountriesBtn.id = 'toggleVisitedCountriesBtn';
+            toggleCountriesBtn.type = 'button';
+            toggleCountriesBtn.title = 'Show/Hide Visited Countries';
+            toggleCountriesBtn.innerText = '🌍';
+            Object.assign(toggleCountriesBtn.style, {
+                padding: '8px 10px',
+                background: '#4b5563',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                fontSize: '18px',
+                transition: 'background-color 0.2s'
+            });
+            btnContainer.appendChild(toggleCountriesBtn);
+        }
+
+        toggleCountriesBtn.addEventListener('click', function() {
+            toggleVisitedCountries();
         });
     }
 }
@@ -279,7 +354,7 @@ function loadCountryBoundaries() {
 
     console.log('Loading country boundary lines using GeoJsonDataSource...');
 
-    Cesium.GeoJsonDataSource.load('data/boundary_lines_50m.geojson', {
+    Cesium.GeoJsonDataSource.load('data/countries_boundary_50m.geojson', {
         stroke: Cesium.Color.LIGHTGREY.withAlpha(0.8),
         strokeWidth: 1.5,
         fill: Cesium.Color.TRANSPARENT,
@@ -359,7 +434,7 @@ function addVisitedCityMarkers() {
 }
 
 function loadVisitedCitiesFromJson() {
-    fetch('data/visited-cities.json')
+    fetch('data/00_visited_cities.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Failed to load visited cities JSON: ${response.status}`);
@@ -406,3 +481,274 @@ window.addEventListener('resize', function() {
         cesiumViewer.resize();
     }
 });
+
+// Helper to extract a readable name from an entity (tries several property keys)
+function getEntityName(entity) {
+    // First prefer entity.name set by GeoJsonDataSource
+    if (entity && entity.name) return String(entity.name).trim();
+
+    if (!entity || !entity.properties) return '';
+
+    const keys = ['name','NAME','NAME_1','admin','province','prov_name','NAME_EN'];
+    for (let k of keys) {
+        if (entity.properties[k]) {
+            try {
+                const prop = entity.properties[k];
+                const val = (typeof prop.getValue === 'function') ? prop.getValue(Cesium.JulianDate.now()) : prop;
+                if (val) return String(val).trim();
+            } catch (e) {
+                // ignore and continue
+            }
+        }
+    }
+
+    // As a last resort, try to inspect property names on the PropertyBag
+    try {
+        const propNames = entity.properties.propertyNames || Object.keys(entity.properties);
+        for (let n of propNames) {
+            try {
+                const prop = entity.properties[n];
+                const val = (prop && typeof prop.getValue === 'function') ? prop.getValue(Cesium.JulianDate.now()) : prop;
+                if (val && String(val).trim()) return String(val).trim();
+            } catch (e) {}
+        }
+    } catch (e) {}
+
+    return '';
+}
+
+/**
+ * Load and render visited provinces by reading local JSON and matching against province GeoJSON
+ */
+function loadVisitedProvinces() {
+    if (!cesiumViewer) return;
+
+    // Remove previous data source if any
+    if (visitedProvinceDataSource) {
+        cesiumViewer.dataSources.remove(visitedProvinceDataSource);
+        visitedProvinceDataSource = null;
+    }
+
+    // Load visited provinces list
+    fetch('data/00_visited_chinese_provinces.json')
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to load visited provinces JSON');
+            return response.json();
+        })
+        .then(json => {
+            const visitedNames = (json.provinces || []).map(p => (p.name || '').trim());
+            if (visitedNames.length === 0) {
+                console.log('No visited provinces found');
+                return;
+            }
+
+            // Load province polygons
+            Cesium.GeoJsonDataSource.load('data/provinces_profiles_50m.geojson', {
+                stroke: Cesium.Color.TRANSPARENT,
+                fill: Cesium.Color.TRANSPARENT,
+                clampToGround: false
+            }).then(function(dataSource) {
+                visitedProvinceDataSource = dataSource;
+                cesiumViewer.dataSources.add(dataSource);
+
+                // For each entity (province), show & fill if visited, otherwise hide
+                const entities = dataSource.entities.values;
+                entities.forEach(entity => {
+                    const ename = getEntityName(entity);
+                    const matched = visitedNames.includes(ename) || visitedNames.includes(ename.replace(/\s+Province$/i, ''));
+
+                    if (entity.polygon) {
+                        if (matched) {
+                            entity.show = true;
+                            entity.polygon.material = Cesium.Color.ORANGE.withAlpha(0.45);
+                            entity.polygon.outline = true;
+                            entity.polygon.outlineColor = Cesium.Color.WHITE;
+                            entity.polygon.outlineWidth = 1;
+                        } else {
+                            entity.show = false;
+                        }
+                    } else if (entity.polyline) {
+                        // Some GeoJSON may give boundaries as polylines - highlight them when matched
+                        if (matched) {
+                            entity.show = true;
+                            entity.polyline.material = new Cesium.PolylineGlowMaterialProperty({
+                                glowPower: 0.2,
+                                color: Cesium.Color.WHITE
+                            });
+                            entity.polyline.width = 2;
+                        } else {
+                            entity.show = false;
+                        }
+                    } else {
+                        // fallback show/hide
+                        entity.show = !!matched;
+                    }
+                });
+
+                console.log('✓ Loaded visited provinces overlay');
+            }).catch(err => {
+                console.error('Error loading provinces geojson:', err);
+            });
+        })
+        .catch(err => console.error('Error loading visited provinces JSON:', err));
+}
+
+function toggleVisitedProvinces() {
+    showVisitedProvinces = !showVisitedProvinces;
+
+    if (showVisitedProvinces) {
+        // Hide countries when showing provinces
+        showVisitedCountries = false;
+        if (visitedCountryDataSource) {
+            cesiumViewer.dataSources.remove(visitedCountryDataSource);
+            visitedCountryDataSource = null;
+        }
+        loadVisitedProvinces();
+    } else {
+        if (visitedProvinceDataSource) {
+            cesiumViewer.dataSources.remove(visitedProvinceDataSource);
+            visitedProvinceDataSource = null;
+        }
+    }
+
+    console.log(`Visited provinces overlay: ${showVisitedProvinces ? 'ON' : 'OFF'}`);
+    return showVisitedProvinces;
+}
+
+/**
+ * Load and render visited countries by reading local JSON and matching against country GeoJSON
+ */
+function loadVisitedCountries() {
+    if (!cesiumViewer) return;
+
+    // Remove previous data source if any
+    if (visitedCountryDataSource) {
+        cesiumViewer.dataSources.remove(visitedCountryDataSource);
+        visitedCountryDataSource = null;
+    }
+
+    // Load visited countries list
+    fetch('data/00_visited_countries.json')
+        .then(response => {
+            if (!response.ok) throw new Error('Failed to load visited countries JSON');
+            return response.json();
+        })
+        .then(json => {
+            const visitedNames = (json.countries || []).map(c => (c.name || '').trim());
+            if (visitedNames.length === 0) {
+                console.log('No visited countries found');
+                return;
+            }
+
+            // Load country polygons
+            Cesium.GeoJsonDataSource.load('data/countries_profiles_50m.geojson', {
+                stroke: Cesium.Color.TRANSPARENT,
+                fill: Cesium.Color.TRANSPARENT,
+                clampToGround: false
+            }).then(function(dataSource) {
+                visitedCountryDataSource = dataSource;
+                cesiumViewer.dataSources.add(dataSource);
+
+                // For each entity (country), show & fill if visited, otherwise hide
+                const entities = dataSource.entities.values;
+                entities.forEach(entity => {
+                    const ename = getEntityName(entity);
+                    const matched = visitedNames.includes(ename) || visitedNames.includes(ename.replace(/\s+Province$/i, ''));
+
+                    if (entity.polygon) {
+                        if (matched) {
+                            entity.show = true;
+                            entity.polygon.material = Cesium.Color.CYAN.withAlpha(0.4);
+                            entity.polygon.outline = true;
+                            entity.polygon.outlineColor = Cesium.Color.WHITE;
+                            entity.polygon.outlineWidth = 1;
+                        } else {
+                            entity.show = false;
+                        }
+                    } else if (entity.polyline) {
+                        // Some GeoJSON may give boundaries as polylines - highlight them when matched
+                        if (matched) {
+                            entity.show = true;
+                            entity.polyline.material = new Cesium.PolylineGlowMaterialProperty({
+                                glowPower: 0.2,
+                                color: Cesium.Color.WHITE
+                            });
+                            entity.polyline.width = 2;
+                        } else {
+                            entity.show = false;
+                        }
+                    } else {
+                        // fallback show/hide
+                        entity.show = !!matched;
+                    }
+                });
+
+                console.log('✓ Loaded visited countries overlay');
+            }).catch(err => {
+                console.error('Error loading countries geojson:', err);
+            });
+        })
+        .catch(err => console.error('Error loading visited countries JSON:', err));
+}
+
+function toggleVisitedCountries() {
+    showVisitedCountries = !showVisitedCountries;
+
+    if (showVisitedCountries) {
+        // Hide provinces when showing countries
+        showVisitedProvinces = false;
+        if (visitedProvinceDataSource) {
+            cesiumViewer.dataSources.remove(visitedProvinceDataSource);
+            visitedProvinceDataSource = null;
+        }
+        loadVisitedCountries();
+    } else {
+        if (visitedCountryDataSource) {
+            cesiumViewer.dataSources.remove(visitedCountryDataSource);
+            visitedCountryDataSource = null;
+        }
+    }
+
+    console.log(`Visited countries overlay: ${showVisitedCountries ? 'ON' : 'OFF'}`);
+    return showVisitedCountries;
+}
+
+/**
+ * Toggle flags sidebar collapse/expand state
+ */
+function toggleFlagsSidebar() {
+    flagsSidebarCollapsed = !flagsSidebarCollapsed;
+    
+    const sidebarPanel = document.getElementById('flagsSidebarPanel');
+    const toggleBtn = document.getElementById('toggleFlagsSidebar');
+    const cesiumMainContainer = document.getElementById('cesiumMainContainer');
+    
+    if (sidebarPanel && toggleBtn && cesiumMainContainer) {
+        if (flagsSidebarCollapsed) {
+            // Collapse: slide sidebar left, restore cesium container
+            sidebarPanel.style.transform = 'translateX(-140px)';
+            cesiumMainContainer.style.width = '100%';
+            cesiumMainContainer.style.transform = 'translateX(0)';
+            cesiumMainContainer.style.marginLeft = '2rem';
+            toggleBtn.innerHTML = '▶';
+            toggleBtn.title = 'Expand Sidebar';
+        } else {
+            // Expand: slide sidebar right, reduce cesium container width and shift right
+            sidebarPanel.style.transform = 'translateX(0)';
+            cesiumMainContainer.style.transform = 'translateX(140px)';
+            cesiumMainContainer.style.width = 'calc(100% - 140px)';
+            cesiumMainContainer.style.marginLeft = '0';
+            toggleBtn.innerHTML = '◀';
+            toggleBtn.title = 'Collapse Sidebar';
+        }
+        
+        // Trigger cesium viewer resize after animation completes
+        if (cesiumViewer) {
+            setTimeout(() => {
+                cesiumViewer.resize();
+            }, 400);
+        }
+    }
+    
+    console.log(`Flags sidebar: ${flagsSidebarCollapsed ? 'COLLAPSED' : 'EXPANDED'}`);
+}

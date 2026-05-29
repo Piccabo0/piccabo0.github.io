@@ -1,0 +1,12 @@
+{
+  "countries": [
+    { "name": "China", "time": "" },
+    { "name": "Singapore", "time": "" },
+    { "name": "Malaysia", "time": "" },
+    { "name": "Vietnam", "time": "" },
+    { "name": "Japan", "time": "" },
+    { "name": "Azerbaijan", "time": "" },
+    { "name": "Kazakhstan", "time": "" },
+    { "name": "Australia", "time": "" }
+  ]
+}
