@@ -1,6 +1,7 @@
 // CesiumJS 3D Footprints Map
 let cesiumViewer = null;
 let cesiumInitialized = false;
+let cesiumInitializing = false;
 let visitedCityEntities = [];
 let visitedCities = [];
 let boundaryEntities = [];
@@ -34,15 +35,64 @@ const COUNTRY_CODE_MAP = {
     'Australia': 'au'
 };
 
-// Set Cesium Ion Access Token
-Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZTc2Yzg3Ny0xZDEzLTRhMjItYTc1MS03MGU1Mjk5ZDY2YTMiLCJpZCI6NDM0NjI5LCJzdWIiOiJQaWNjYWJvbyIsImlzcyI6Imh0dHBzOi8vaW9uLmNlc2l1bS5jb20iLCJhdWQiOiJNeVRva2VuIiwiaWF0IjoxNzc5MzY1Mjk4fQ.mpN9JH1ltXPounHE-42giykKbFgvFgoMkDncCEhYCok';
+const CESIUM_SCRIPT_SOURCES = [
+    'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
+    'https://cdn.jsdelivr.net/npm/cesium/Build/Cesium/Cesium.js'
+];
 
-function initCesiumMap() {
-    if (cesiumInitialized) {
+let cesiumLoadPromise = null;
+
+function loadExternalScript(src) {
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.async = true;
+        script.onload = () => resolve(src);
+        script.onerror = () => reject(new Error(`Failed to load ${src}`));
+        document.head.appendChild(script);
+    });
+}
+
+function ensureCesiumLibrary() {
+    if (typeof Cesium !== 'undefined') {
+        return Promise.resolve(true);
+    }
+
+    if (!cesiumLoadPromise) {
+        cesiumLoadPromise = (async () => {
+            for (const src of CESIUM_SCRIPT_SOURCES) {
+                try {
+                    await loadExternalScript(src);
+                    if (typeof Cesium !== 'undefined') {
+                        return true;
+                    }
+                } catch (error) {
+                    console.warn(error.message);
+                }
+            }
+            return typeof Cesium !== 'undefined';
+        })();
+    }
+
+    return cesiumLoadPromise;
+}
+
+async function initCesiumMap() {
+    if (cesiumInitialized || cesiumInitializing) {
         return;
     }
 
+    cesiumInitializing = true;
+
     try {
+        const cesiumReady = await ensureCesiumLibrary();
+        if (!cesiumReady) {
+            console.error('Cesium library is unavailable. Check the CDN connection or add a local Cesium build.');
+            return;
+        }
+
+        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJhZTc2Yzg3Ny0xZDEzLTRhMjItYTc1MS03MGU1Mjk5ZDY2YTMiLCJpZCI6NDM0NjI5LCJzdWIiOiJQaWNjYWJvbyIsImlzcyI6Imh0dHBzOi8vaW9uLmNlc2l1bS5jb20iLCJhdWQiOiJNeVRva2VuIiwiaWF0IjoxNzc5MzY1Mjk4fQ.mpN9JH1ltXPounHE-42giykKbFgvFgoMkDncCEhYCok';
+
         cesiumViewer = new Cesium.Viewer('cesiumContainer', {
             animation: false,
             baseLayerPicker: false,
@@ -85,6 +135,8 @@ function initCesiumMap() {
         cesiumInitialized = true;
     } catch (error) {
         console.error('Error initializing Cesium map:', error);
+    } finally {
+        cesiumInitializing = false;
     }
 }
 
