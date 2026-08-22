@@ -17,11 +17,14 @@
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
     <!-- CesiumJS -->
-    <script src="https://unpkg.com/cesium/Build/Cesium/Cesium.js"></script>
+    <script>
+        window.CESIUM_BASE_URL = 'https://cdn.jsdelivr.net/npm/cesium/Build/Cesium/';
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/cesium/Build/Cesium/Cesium.js"></script>
     <!-- Flag Icons CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.3.2/css/flag-icons.min.css"/>
     <!-- CesiumJS CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/cesium/Build/Cesium/Widgets/widgets.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium/Build/Cesium/Widgets/widgets.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>

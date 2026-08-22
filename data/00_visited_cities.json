@@ -66,6 +66,8 @@
     { "name": "Lanzhou", "latitude": 36.0611, "longitude": 103.8343 },
     { "name": "Yinchuan", "latitude": 38.4872, "longitude": 106.2309 },
     { "name": "Zhongwei", "latitude": 37.4980, "longitude": 105.2078 },
+    { "name": "Xining", "latitude": 36.65047553248102, "longitude": 101.76617912237464 },
+    { "name": "Hainanzangzuzizhizhou", "latitude": 36.28672525632953, "longitude": 100.62087964626393 },
     { "name": "Lhasa", "latitude": 29.6520, "longitude": 91.1721 },
     { "name": "Rikaze", "latitude": 29.2670, "longitude": 88.8800 },
     { "name": "Dingri County", "latitude": 28.6564, "longitude": 87.1290 },

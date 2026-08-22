@@ -36,7 +36,6 @@ const COUNTRY_CODE_MAP = {
 };
 
 const CESIUM_SCRIPT_SOURCES = [
-    'https://unpkg.com/cesium/Build/Cesium/Cesium.js',
     'https://cdn.jsdelivr.net/npm/cesium/Build/Cesium/Cesium.js'
 ];
 
@@ -57,6 +56,8 @@ function ensureCesiumLibrary() {
     if (typeof Cesium !== 'undefined') {
         return Promise.resolve(true);
     }
+
+    window.CESIUM_BASE_URL = 'https://cdn.jsdelivr.net/npm/cesium/Build/Cesium/';
 
     if (!cesiumLoadPromise) {
         cesiumLoadPromise = (async () => {
@@ -485,7 +486,7 @@ function addVisitedCityMarkers() {
             // 极简圆点
             point: {
                 pixelSize: 4,
-                color: Cesium.Color.ORANGE.withAlpha(0.9),
+                color: Cesium.Color.RED.withAlpha(0.9),
                 outlineColor: Cesium.Color.WHITE,
                 outlineWidth: 1,
                 disableDepthTestDistance: Number.POSITIVE_INFINITY
