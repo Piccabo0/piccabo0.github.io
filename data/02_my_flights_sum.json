@@ -1,0 +1,914 @@
+[
+  {
+    "date": "2026-08-21",
+    "flightNumber": "CA1262",
+    "airline": "Air China",
+    "origin": "XNN",
+    "destination": "PEK",
+    "aircraft": "A319-115"
+  },
+  {
+    "date": "2026-08-17",
+    "flightNumber": "CA8653",
+    "airline": "Air China",
+    "origin": "PKX",
+    "destination": "INC",
+    "aircraft": "B737-89L"
+  },
+  {
+    "date": "2026-05-07",
+    "flightNumber": "3U6871",
+    "airline": "Sichuan Airlines",
+    "origin": "TFU",
+    "destination": "PEK",
+    "aircraft": "A330-343"
+  },
+  {
+    "date": "2026-05-06",
+    "flightNumber": "3U3892",
+    "airline": "Sichuan Airlines",
+    "origin": "SYD",
+    "destination": "TFU",
+    "aircraft": "A330-343"
+  },
+  {
+    "date": "2026-05-03",
+    "flightNumber": "JQ508",
+    "airline": "Jetstar",
+    "origin": "MEL",
+    "destination": "SYD",
+    "aircraft": "A321-231"
+  },
+  {
+    "date": "2026-04-30",
+    "flightNumber": "JQ523",
+    "airline": "Jetstar",
+    "origin": "SYD",
+    "destination": "MEL",
+    "aircraft": "A320-232"
+  },
+  {
+    "date": "2026-04-30",
+    "flightNumber": "3U3891",
+    "airline": "Sichuan Airlines",
+    "origin": "TFU",
+    "destination": "SYD",
+    "aircraft": "A330-343"
+  },
+  {
+    "date": "2026-04-29",
+    "flightNumber": "3U8884",
+    "airline": "Sichuan Airlines",
+    "origin": "PEK",
+    "destination": "CTU",
+    "aircraft": "A330-243"
+  },
+  {
+    "date": "2026-03-15",
+    "flightNumber": "SC8814",
+    "airline": "Shandong Airlines",
+    "origin": "TNA",
+    "destination": "HET",
+    "aircraft": "B737-85N"
+  },
+  {
+    "date": "2026-02-26",
+    "flightNumber": "CA8206",
+    "airline": "Air China",
+    "origin": "PEK",
+    "destination": "WUH",
+    "aircraft": "A320-214"
+  },
+  {
+    "date": "2026-02-10",
+    "flightNumber": "CA8683",
+    "airline": "Air China",
+    "origin": "PKX",
+    "destination": "YNT",
+    "aircraft": "B737-MAX8"
+  },
+  {
+    "date": "2026-01-05",
+    "flightNumber": "CA4117",
+    "airline": "Air China",
+    "origin": "CTU",
+    "destination": "PEK",
+    "aircraft": "A321-272"
+  },
+  {
+    "date": "2026-01-05",
+    "flightNumber": "CA2552",
+    "airline": "Air China",
+    "origin": "DLU",
+    "destination": "TFU",
+    "aircraft": "B737-79L"
+  },
+  {
+    "date": "2025-12-31",
+    "flightNumber": "KY8264",
+    "airline": "Kunming Airlines",
+    "origin": "SJW",
+    "destination": "KMG",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2025-10-31",
+    "flightNumber": "CA8665",
+    "airline": "Air China",
+    "origin": "PKX",
+    "destination": "CGQ",
+    "aircraft": "B737-89L"
+  },
+  {
+    "date": "2025-10-10",
+    "flightNumber": "9C6788",
+    "airline": "Spring Airlines",
+    "origin": "LHW",
+    "destination": "SJW",
+    "aircraft": "A320-251"
+  },
+  {
+    "date": "2025-10-09",
+    "flightNumber": "9C6670",
+    "airline": "Spring Airlines",
+    "origin": "YIN",
+    "destination": "LHW",
+    "aircraft": "A320-251"
+  },
+  {
+    "date": "2025-10-03",
+    "flightNumber": "CA2751",
+    "airline": "Air China",
+    "origin": "TFU",
+    "destination": "YIN",
+    "aircraft": "A320-271"
+  },
+  {
+    "date": "2025-10-02",
+    "flightNumber": "CA4196",
+    "airline": "Air China",
+    "origin": "PEK",
+    "destination": "TFU",
+    "aircraft": "A330-343"
+  },
+  {
+    "date": "2025-07-12",
+    "flightNumber": "GS7923",
+    "airline": "Tianjin Airlines",
+    "origin": "TSN",
+    "destination": "CGQ",
+    "aircraft": "A320-271"
+  },
+  {
+    "date": "2025-05-07",
+    "flightNumber": "MU5161",
+    "airline": "China Eastern Airlines",
+    "origin": "PVG",
+    "destination": "PEK",
+    "aircraft": "A321-211"
+  },
+  {
+    "date": "2025-05-06",
+    "flightNumber": "MU8516",
+    "airline": "China Eastern Airlines",
+    "origin": "KWE",
+    "destination": "PVG",
+    "aircraft": "B737-MAX8"
+  },
+  {
+    "date": "2025-05-02",
+    "flightNumber": "CA8672",
+    "airline": "Air China",
+    "origin": "PKX",
+    "destination": "KWE",
+    "aircraft": "A320-271"
+  },
+  {
+    "date": "2025-04-02",
+    "flightNumber": "KN5579",
+    "airline": "China United Airlines",
+    "origin": "PKX",
+    "destination": "YNJ",
+    "aircraft": "B737-86N"
+  },
+  {
+    "date": "2025-02-10",
+    "flightNumber": "MU6389",
+    "airline": "China Eastern Airlines",
+    "origin": "PKX",
+    "destination": "CGQ",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2025-02-05",
+    "flightNumber": "MU2374",
+    "airline": "China Eastern Airlines",
+    "origin": "YNT",
+    "destination": "TYN",
+    "aircraft": "A320-214"
+  },
+  {
+    "date": "2024-12-21",
+    "flightNumber": "SC7607",
+    "airline": "Shandong Airlines",
+    "origin": "YNT",
+    "destination": "PEK",
+    "aircraft": "B737-85N"
+  },
+  {
+    "date": "2024-12-17",
+    "flightNumber": "CA1559",
+    "airline": "Air China",
+    "origin": "PEK",
+    "destination": "YNT",
+    "aircraft": "A321-232"
+  },
+  {
+    "date": "2024-11-04",
+    "flightNumber": "SC4655",
+    "airline": "Shandong Airlines",
+    "origin": "TAO",
+    "destination": "PEK",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2024-11-01",
+    "flightNumber": "SC4658",
+    "airline": "Shandong Airlines",
+    "origin": "PEK",
+    "destination": "TAO",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2024-10-17",
+    "flightNumber": "MU9035",
+    "airline": "China Eastern Airlines",
+    "origin": "KHN",
+    "destination": "SJW",
+    "aircraft": "C909"
+  },
+  {
+    "date": "2024-10-10",
+    "flightNumber": "MU9668",
+    "airline": "China Eastern Airlines",
+    "origin": "PKX",
+    "destination": "HGH",
+    "aircraft": "A320-251"
+  },
+  {
+    "date": "2024-09-03",
+    "flightNumber": "TR138",
+    "airline": "Scoot",
+    "origin": "SIN",
+    "destination": "TSN",
+    "aircraft": "B787-9"
+  },
+  {
+    "date": "2024-08-30",
+    "flightNumber": "TR139",
+    "airline": "Scoot",
+    "origin": "TSN",
+    "destination": "SIN",
+    "aircraft": "B787-9"
+  },
+  {
+    "date": "2024-05-27",
+    "flightNumber": "HX304",
+    "airline": "Hong Kong Airlines",
+    "origin": "HKG",
+    "destination": "PEK",
+    "aircraft": "A320-214"
+  },
+  {
+    "date": "2024-05-24",
+    "flightNumber": "HX305",
+    "airline": "Hong Kong Airlines",
+    "origin": "PEK",
+    "destination": "HKG",
+    "aircraft": "A320-214"
+  },
+  {
+    "date": "2024-03-20",
+    "flightNumber": "SC4655",
+    "airline": "Shandong Airlines",
+    "origin": "TAO",
+    "destination": "PEK",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2024-03-20",
+    "flightNumber": "SC4092",
+    "airline": "Shandong Airlines",
+    "origin": "KIX",
+    "destination": "TAO",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2024-03-14",
+    "flightNumber": "MU789",
+    "airline": "China Eastern Airlines",
+    "origin": "PKX",
+    "destination": "NRT",
+    "aircraft": "A321-231"
+  },
+  {
+    "date": "2024-02-24",
+    "flightNumber": "SC7609",
+    "airline": "Shandong Airlines",
+    "origin": "YNT",
+    "destination": "PEK",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2024-02-03",
+    "flightNumber": "SC7602",
+    "airline": "Shandong Airlines",
+    "origin": "PEK",
+    "destination": "YNT",
+    "aircraft": "B737-85N"
+  },
+  {
+    "date": "2024-01-02",
+    "flightNumber": "MU5696",
+    "airline": "China Eastern Airlines",
+    "origin": "LYA",
+    "destination": "PKX",
+    "aircraft": "A320-214"
+  },
+  {
+    "date": "2023-12-24",
+    "flightNumber": "J267",
+    "airline": "Azerbaijan Airlines",
+    "origin": "GYD",
+    "destination": "PEK",
+    "aircraft": "B767-300"
+  },
+  {
+    "date": "2023-12-21",
+    "flightNumber": "J268",
+    "airline": "Azerbaijan Airlines",
+    "origin": "PEK",
+    "destination": "GYD",
+    "aircraft": "B767-300"
+  },
+  {
+    "date": "2023-10-15",
+    "flightNumber": "CA1594",
+    "airline": "Air China",
+    "origin": "YNT",
+    "destination": "PEK",
+    "aircraft": "B737-89L"
+  },
+  {
+    "date": "2023-10-14",
+    "flightNumber": "KN5969",
+    "airline": "China United Airlines",
+    "origin": "PKX",
+    "destination": "YNT",
+    "aircraft": "B737-89P"
+  },
+  {
+    "date": "2023-10-04",
+    "flightNumber": "MU8860",
+    "airline": "China Eastern Airlines",
+    "origin": "SHA",
+    "destination": "PKX",
+    "aircraft": "A330-343"
+  },
+  {
+    "date": "2023-10-04",
+    "flightNumber": "MU8448",
+    "airline": "China Eastern Airlines",
+    "origin": "FOC",
+    "destination": "SHA",
+    "aircraft": "B737-86D"
+  },
+  {
+    "date": "2023-09-30",
+    "flightNumber": "MF8116",
+    "airline": "Xiamen Airlines",
+    "origin": "PKX",
+    "destination": "FOC",
+    "aircraft": "B737-85C"
+  },
+  {
+    "date": "2023-09-01",
+    "flightNumber": "MU6962",
+    "airline": "China Eastern Airlines",
+    "origin": "YNT",
+    "destination": "PKX",
+    "aircraft": "A319-133"
+  },
+  {
+    "date": "2023-08-10",
+    "flightNumber": "3U6981",
+    "airline": "Sichuan Airlines",
+    "origin": "TFU",
+    "destination": "YNT",
+    "aircraft": "A320-214"
+  },
+  {
+    "date": "2023-08-09",
+    "flightNumber": "3U3904",
+    "airline": "Sichuan Airlines",
+    "origin": "SGN",
+    "destination": "TFU",
+    "aircraft": "A321-200"
+  },
+  {
+    "date": "2023-08-05",
+    "flightNumber": "AK5131",
+    "airline": "AirAsia",
+    "origin": "BKI",
+    "destination": "KUL",
+    "aircraft": "A320-200"
+  },
+  {
+    "date": "2023-08-05",
+    "flightNumber": "AK6271",
+    "airline": "AirAsia",
+    "origin": "TWU",
+    "destination": "BKI",
+    "aircraft": "A320-200"
+  },
+  {
+    "date": "2023-08-02",
+    "flightNumber": "AK6262",
+    "airline": "AirAsia",
+    "origin": "BKI",
+    "destination": "TWU",
+    "aircraft": "A320-200"
+  },
+  {
+    "date": "2023-08-01",
+    "flightNumber": "AK1561",
+    "airline": "AirAsia",
+    "origin": "PKX",
+    "destination": "BKI",
+    "aircraft": "A320-200"
+  },
+  {
+    "date": "2023-05-15",
+    "flightNumber": "MU6281",
+    "airline": "China Eastern Airlines",
+    "origin": "TFU",
+    "destination": "PKX",
+    "aircraft": "A320-200"
+  },
+  {
+    "date": "2023-05-14",
+    "flightNumber": "MU6194",
+    "airline": "China Eastern Airlines",
+    "origin": "LXA",
+    "destination": "TFU",
+    "aircraft": "A330-243"
+  },
+  {
+    "date": "2023-05-07",
+    "flightNumber": "MF8411",
+    "airline": "Xiamen Airlines",
+    "origin": "CKG",
+    "destination": "LXA",
+    "aircraft": "B737-75C"
+  },
+  {
+    "date": "2023-05-06",
+    "flightNumber": "MF8455",
+    "airline": "Xiamen Airlines",
+    "origin": "PKX",
+    "destination": "CKG",
+    "aircraft": "B737-85C"
+  },
+  {
+    "date": "2023-02-16",
+    "flightNumber": "HU7702",
+    "airline": "Hainan Airlines",
+    "origin": "SZX",
+    "destination": "PEK",
+    "aircraft": "B737-84P"
+  },
+  {
+    "date": "2023-02-08",
+    "flightNumber": "MU5307",
+    "airline": "China Eastern Airlines",
+    "origin": "SHA",
+    "destination": "CAN",
+    "aircraft": "A330-243"
+  },
+  {
+    "date": "2023-02-08",
+    "flightNumber": "MU5337",
+    "airline": "China Eastern Airlines",
+    "origin": "YNT",
+    "destination": "SHA",
+    "aircraft": "A321-211"
+  },
+  {
+    "date": "2022-12-11",
+    "flightNumber": "KN5969",
+    "airline": "China United Airlines",
+    "origin": "PKX",
+    "destination": "YNT",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2022-02-22",
+    "flightNumber": "MU6291",
+    "airline": "China Eastern Airlines",
+    "origin": "YNT",
+    "destination": "PKX",
+    "aircraft": "A319-115"
+  },
+  {
+    "date": "2022-01-17",
+    "flightNumber": "MU6603",
+    "airline": "China Eastern Airlines",
+    "origin": "PKX",
+    "destination": "YNT",
+    "aircraft": "B737-89P"
+  },
+  {
+    "date": "2021-09-03",
+    "flightNumber": "MU6962",
+    "airline": "China Eastern Airlines",
+    "origin": "YNT",
+    "destination": "PKX",
+    "aircraft": "A320-214"
+  },
+  {
+    "date": "2021-08-05",
+    "flightNumber": "SC4854",
+    "airline": "Shandong Airlines",
+    "origin": "PEK",
+    "destination": "YNT",
+    "aircraft": "B737-85N"
+  },
+  {
+    "date": "2021-03-20",
+    "flightNumber": "SC4851",
+    "airline": "Shandong Airlines",
+    "origin": "YNT",
+    "destination": "PEK",
+    "aircraft": "B737-85N"
+  },
+  {
+    "date": "2021-01-22",
+    "flightNumber": "KN5969",
+    "airline": "China United Airlines",
+    "origin": "PKX",
+    "destination": "YNT",
+    "aircraft": "B737-89P"
+  },
+  {
+    "date": "2020-09-06",
+    "flightNumber": "SC4851",
+    "airline": "Shandong Airlines",
+    "origin": "YNT",
+    "destination": "PEK",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2020-08-31",
+    "flightNumber": "SC8048",
+    "airline": "Shandong Airlines",
+    "origin": "XIY",
+    "destination": "YNT",
+    "aircraft": "B737-800"
+  },
+  {
+    "date": "2020-08-26",
+    "flightNumber": "3U8770",
+    "airline": "Sichuan Airlines",
+    "origin": "YNT",
+    "destination": "XIY",
+    "aircraft": "A321-231"
+  },
+  {
+    "date": "2020-01-09",
+    "flightNumber": "KN5715",
+    "airline": "China United Airlines",
+    "origin": "PKX",
+    "destination": "YNT",
+    "aircraft": "B737-89P"
+  },
+  {
+    "date": "2019-08-27",
+    "flightNumber": "SC4851",
+    "airline": "Shandong Airlines",
+    "origin": "YNT",
+    "destination": "PEK",
+    "aircraft": "B737-85N"
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  },
+  {
+    "date": NaN,
+    "flightNumber": NaN,
+    "airline": NaN,
+    "origin": NaN,
+    "destination": NaN,
+    "aircraft": NaN
+  }
+]
