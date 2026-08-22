@@ -1,4 +1,4 @@
-// CesiumJS 3D Footprints Map
+﻿// CesiumJS 3D Footprints Map
 let cesiumViewer = null;
 let cesiumInitialized = false;
 let cesiumInitializing = false;
@@ -19,6 +19,12 @@ let showVisitedProvinces = false;
 // Add variables for visited countries overlay
 let visitedCountryDataSource = null;
 let showVisitedCountries = false;
+
+// Add variables for personal flight routes overlay
+let flightRouteEntities = [];
+let showFlightRoutes = false;
+let flightRoutesLoaded = false;
+let flightRoutesLoading = false;
 
 // Add variable for sidebar collapsed state
 let flagsSidebarCollapsed = true;
@@ -114,10 +120,10 @@ async function initCesiumMap() {
         // Fix blur issue on high-DPI screens by matching device pixel ratio
         cesiumViewer.resolutionScale = window.devicePixelRatio;
 
-        // 开启抗锯齿
+        // 寮€鍚姉閿娇
         cesiumViewer.scene.postProcessStages.fxaa.enabled = true;
 
-        // 关闭环境迷雾，提升通透度
+        // 鍏抽棴鐜杩烽浘锛屾彁鍗囬€氶€忓害
         cesiumViewer.scene.globe.showGroundAtmosphere = true;
 
         cesiumViewer.camera.flyTo({
@@ -159,7 +165,7 @@ function loadBackgroundLabelLayer() {
         labelLayer = cesiumViewer.imageryLayers.addImageryProvider(labelLayerProvider);
         labelLayer.show = showBackgroundLabels;
         
-        console.log('✓ Background label layer loaded');
+        console.log('鉁?Background label layer loaded');
     } catch (error) {
         console.error('Error loading background label layer:', error);
     }
@@ -190,7 +196,7 @@ function adjustMouseWheelZoomSpeed() {
         // Default is around 1.0
         cesiumViewer.scene.screenSpaceCameraController.zoomFactor = 2.0;
         
-        console.log('✓ Mouse wheel zoom speed adjusted');
+        console.log('鉁?Mouse wheel zoom speed adjusted');
     } catch (error) {
         console.error('Error adjusting zoom speed:', error);
     }
@@ -274,7 +280,268 @@ function setupControlButtons() {
         toggleCountriesBtn.addEventListener('click', function() {
             toggleVisitedCountries();
         });
+
+        // Create toggle button for personal flight routes
+        let toggleFlightsBtn = document.getElementById('toggleFlightRoutesBtn');
+        if (!toggleFlightsBtn) {
+            toggleFlightsBtn = document.createElement('button');
+            toggleFlightsBtn.id = 'toggleFlightRoutesBtn';
+            toggleFlightsBtn.type = 'button';
+            toggleFlightsBtn.title = 'Show/Hide Flight Routes';
+            toggleFlightsBtn.innerText = '✈';
+            Object.assign(toggleFlightsBtn.style, {
+                padding: '8px 10px',
+                background: '#4b5563',
+                color: '#ffffff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                fontSize: '18px',
+                transition: 'background-color 0.2s'
+            });
+            btnContainer.appendChild(toggleFlightsBtn);
+        }
+
+        toggleFlightsBtn.addEventListener('click', function() {
+            toggleFlightRoutes();
+        });
     }
+}
+
+function setFootprintsButtonActive(buttonId, isActive, activeColor) {
+    const button = document.getElementById(buttonId);
+    if (button) {
+        button.style.background = isActive ? activeColor : '#4b5563';
+    }
+}
+
+function parsePossiblyDirtyJson(text) {
+    return JSON.parse(text.replace(/\bNaN\b/g, 'null'));
+}
+
+function fetchPossiblyDirtyJson(url) {
+    return fetch(url).then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to load ${url}: ${response.status}`);
+        }
+
+        return response.text();
+    }).then(parsePossiblyDirtyJson);
+}
+
+function buildAirportIataIndex(airportsInfo) {
+    const index = new Map();
+    Object.values(airportsInfo || {}).forEach(airport => {
+        const iata = typeof airport.iata === 'string' ? airport.iata.trim().toUpperCase() : '';
+        const lat = Number(airport.lat);
+        const lon = Number(airport.lon);
+
+        if (iata && Number.isFinite(lat) && Number.isFinite(lon) && !index.has(iata)) {
+            index.set(iata, {
+                iata,
+                lat,
+                lon,
+                name: airport.name || iata,
+                city: airport.city || '',
+                country: airport.country || ''
+            });
+        }
+    });
+
+    return index;
+}
+
+function getAirportByIata(index, code) {
+    if (typeof code !== 'string') {
+        return null;
+    }
+
+    return index.get(code.trim().toUpperCase()) || null;
+}
+
+function haversineDistanceMeters(start, end) {
+    const radius = 6371000;
+    const toRadians = degrees => degrees * Math.PI / 180;
+    const lat1 = toRadians(start.lat);
+    const lat2 = toRadians(end.lat);
+    const deltaLat = toRadians(end.lat - start.lat);
+    const deltaLon = toRadians(end.lon - start.lon);
+    const a = Math.sin(deltaLat / 2) ** 2 +
+        Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) ** 2;
+
+    return 2 * radius * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function buildGreatCircleArcPositions(start, end, offsetIndex = 0, offsetCount = 1) {
+    const startCartographic = Cesium.Cartographic.fromDegrees(start.lon, start.lat);
+    const endCartographic = Cesium.Cartographic.fromDegrees(end.lon, end.lat);
+    const geodesic = new Cesium.EllipsoidGeodesic(startCartographic, endCartographic);
+    const distance = haversineDistanceMeters(start, end);
+    const sampleCount = Math.max(16, Math.min(96, Math.ceil(distance / 180000)));
+    const maxHeight = Math.max(60000, Math.min(650000, distance * 0.08));
+    const offsetSpacing = Math.max(12000, Math.min(65000, distance * 0.02));
+    const centeredOffset = offsetIndex - (offsetCount - 1) / 2;
+    const positions = [];
+
+    const startSurface = Cesium.Cartesian3.fromRadians(startCartographic.longitude, startCartographic.latitude, 0);
+    const endSurface = Cesium.Cartesian3.fromRadians(endCartographic.longitude, endCartographic.latitude, 0);
+    const routeVector = Cesium.Cartesian3.subtract(endSurface, startSurface, new Cesium.Cartesian3());
+
+    for (let i = 0; i <= sampleCount; i += 1) {
+        const fraction = i / sampleCount;
+        const cartographic = geodesic.interpolateUsingFraction(fraction);
+        const surfacePoint = Cesium.Cartesian3.fromRadians(cartographic.longitude, cartographic.latitude, 0);
+        const normal = Cesium.Cartesian3.normalize(surfacePoint, new Cesium.Cartesian3());
+        const projection = Cesium.Cartesian3.multiplyByScalar(normal, Cesium.Cartesian3.dot(routeVector, normal), new Cesium.Cartesian3());
+        const tangent = Cesium.Cartesian3.subtract(routeVector, projection, new Cesium.Cartesian3());
+        Cesium.Cartesian3.normalize(tangent, tangent);
+        const lateral = Cesium.Cartesian3.normalize(Cesium.Cartesian3.cross(normal, tangent, new Cesium.Cartesian3()), new Cesium.Cartesian3());
+        const laneOffset = centeredOffset * offsetSpacing * Math.sin(Math.PI * fraction);
+        const height = Math.sin(Math.PI * fraction) * maxHeight;
+        const elevated = Cesium.Cartesian3.add(surfacePoint, Cesium.Cartesian3.multiplyByScalar(normal, height, new Cesium.Cartesian3()), new Cesium.Cartesian3());
+        positions.push(Cesium.Cartesian3.add(elevated, Cesium.Cartesian3.multiplyByScalar(lateral, laneOffset, new Cesium.Cartesian3()), new Cesium.Cartesian3()));
+    }
+
+    return positions;
+}
+
+function clearFlightRoutes() {
+    if (!cesiumViewer || flightRouteEntities.length === 0) {
+        return;
+    }
+
+    flightRouteEntities.forEach(entity => {
+        cesiumViewer.entities.remove(entity);
+    });
+
+    flightRouteEntities = [];
+    flightRoutesLoaded = false;
+}
+
+function addAirportPoint(airport) {
+    const entity = cesiumViewer.entities.add({
+        position: Cesium.Cartesian3.fromDegrees(airport.lon, airport.lat, 0),
+        point: {
+            pixelSize: 5,
+            color: Cesium.Color.WHITE.withAlpha(0.95),
+            outlineColor: Cesium.Color.DEEPSKYBLUE,
+            outlineWidth: 2,
+            disableDepthTestDistance: Number.POSITIVE_INFINITY
+        },
+        label: {
+            text: airport.iata,
+            font: '12px sans-serif',
+            fillColor: Cesium.Color.WHITE,
+            outlineColor: Cesium.Color.BLACK,
+            outlineWidth: 2,
+            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+            pixelOffset: new Cesium.Cartesian2(0, -16),
+            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 8000000),
+            disableDepthTestDistance: Number.POSITIVE_INFINITY
+        },
+        description: `<p><strong>${airport.iata}</strong> ${airport.name}</p><p>${airport.city}${airport.city && airport.country ? ', ' : ''}${airport.country}</p>`
+    });
+
+    flightRouteEntities.push(entity);
+}
+
+function loadFlightRoutes() {
+    if (!cesiumViewer || flightRoutesLoading || flightRoutesLoaded) {
+        return Promise.resolve();
+    }
+
+    flightRoutesLoading = true;
+
+    return Promise.all([
+        fetchPossiblyDirtyJson('data/02_my_flights_sum.json'),
+        fetchPossiblyDirtyJson('data/02_airports_info.json')
+    ]).then(([flights, airportsInfo]) => {
+        const airportIndex = buildAirportIataIndex(airportsInfo);
+        const airportPoints = new Map();
+        const routeCounts = new Map();
+        let renderedRoutes = 0;
+        let skippedRoutes = 0;
+
+        (Array.isArray(flights) ? flights : []).forEach(flight => {
+            const origin = getAirportByIata(airportIndex, flight && flight.origin);
+            const destination = getAirportByIata(airportIndex, flight && flight.destination);
+            if (!origin || !destination) {
+                skippedRoutes += 1;
+                return;
+            }
+
+            const routeKey = `${origin.iata}|${destination.iata}`;
+            routeCounts.set(routeKey, (routeCounts.get(routeKey) || 0) + 1);
+            airportPoints.set(origin.iata, origin);
+            airportPoints.set(destination.iata, destination);
+            renderedRoutes += 1;
+        });
+
+        const routeOffsets = new Map();
+        (Array.isArray(flights) ? flights : []).forEach(flight => {
+            const origin = getAirportByIata(airportIndex, flight && flight.origin);
+            const destination = getAirportByIata(airportIndex, flight && flight.destination);
+            if (!origin || !destination) {
+                return;
+            }
+
+            const routeKey = `${origin.iata}|${destination.iata}`;
+            const offsetIndex = routeOffsets.get(routeKey) || 0;
+            routeOffsets.set(routeKey, offsetIndex + 1);
+
+            const positions = buildGreatCircleArcPositions(origin, destination, offsetIndex, routeCounts.get(routeKey) || 1);
+            const routeLabel = `${origin.iata} -> ${destination.iata}`;
+            const flightNumber = flight.flightNumber || 'Flight';
+            const routeEntity = cesiumViewer.entities.add({
+                name: `${flightNumber} ${routeLabel}`,
+                polyline: {
+                    positions,
+                    width: 3.4,
+                    material: new Cesium.PolylineGlowMaterialProperty({
+                        glowPower: 0.18,
+                        color: Cesium.Color.DEEPSKYBLUE.withAlpha(0.82)
+                    }),
+                    arcType: Cesium.ArcType.NONE,
+                    clampToGround: false
+                },
+                description: [
+                    `<p><strong>${flightNumber}</strong> ${routeLabel}</p>`,
+                    flight.date ? `<p>Date: ${flight.date}</p>` : '',
+                    flight.airline ? `<p>Airline: ${flight.airline}</p>` : '',
+                    flight.aircraft ? `<p>Aircraft: ${flight.aircraft}</p>` : '',
+                    `<p>${origin.name} to ${destination.name}</p>`
+                ].join('')
+            });
+
+            flightRouteEntities.push(routeEntity);
+        });
+
+        airportPoints.forEach(addAirportPoint);
+
+        flightRoutesLoaded = true;
+        console.log(`Loaded ${renderedRoutes} flight routes; skipped ${skippedRoutes} incomplete routes`);
+    }).catch(error => {
+        showFlightRoutes = false;
+        setFootprintsButtonActive('toggleFlightRoutesBtn', false, '#0284c7');
+        console.error('Error loading flight routes:', error);
+    }).finally(() => {
+        flightRoutesLoading = false;
+    });
+}
+
+function toggleFlightRoutes() {
+    showFlightRoutes = !showFlightRoutes;
+    setFootprintsButtonActive('toggleFlightRoutesBtn', showFlightRoutes, '#0284c7');
+
+    if (showFlightRoutes) {
+        loadFlightRoutes();
+    } else {
+        clearFlightRoutes();
+    }
+
+    console.log(`Flight routes overlay: ${showFlightRoutes ? 'ON' : 'OFF'}`);
+    return showFlightRoutes;
 }
 
 function clearVisitedCityMarkers() {
@@ -387,7 +654,7 @@ function loadProvinceBoundaries() {
                 entity.polyline.material = new Cesium.PolylineDashMaterialProperty({
                     color: Cesium.Color.LIGHTGREY.withAlpha(0.9),
                     dashLength: 25,
-                    dashPattern: 0x0F0F // 标准虚线：显示50%像素，隐藏50%像素
+                    dashPattern: 0x0F0F // 鏍囧噯铏氱嚎锛氭樉绀?0%鍍忕礌锛岄殣钘?0%鍍忕礌
                 });
                 entity.polyline.width = 1;
                 
@@ -398,7 +665,7 @@ function loadProvinceBoundaries() {
         });
         
         const boundaryCount = dataSource.entities.length;
-        console.log(`✓ Loaded ${boundaryCount} province boundaries (dashed)`);
+        console.log(`鉁?Loaded ${boundaryCount} province boundaries (dashed)`);
     }).catch(function(error) {
         console.error('Error loading province boundaries:', error);
     });
@@ -440,7 +707,7 @@ function loadCountryBoundaries() {
         });
         
         const lineCount = dataSource.entities.length;
-        console.log(`✓ Loaded ${lineCount} international boundary lines`);
+        console.log(`鉁?Loaded ${lineCount} international boundary lines`);
     }).catch(function(error) {
         console.error('Error loading country boundaries:', error);
     });
@@ -476,14 +743,14 @@ function addVisitedCityMarkers() {
     clearVisitedCityMarkers();
 
     visitedCities.forEach(city => {
-        // 【建议】如果你以后在 JSON 中增加了 level 字段，可以在这里动态设定基础配置
+        // 銆愬缓璁€戝鏋滀綘浠ュ悗鍦?JSON 涓鍔犱簡 level 瀛楁锛屽彲浠ュ湪杩欓噷鍔ㄦ€佽瀹氬熀纭€閰嶇疆
         // let baseScale = city.level === 1 ? 1.2 : 0.9;
         // let visibleDistance = city.level === 1 ? 15000000 : 5000000;
 
         const entity = cesiumViewer.entities.add({
             position: Cesium.Cartesian3.fromDegrees(city.longitude, city.latitude, 0),
             
-            // 极简圆点
+            // 鏋佺畝鍦嗙偣
             point: {
                 pixelSize: 4,
                 color: Cesium.Color.RED.withAlpha(0.9),
@@ -492,7 +759,7 @@ function addVisitedCityMarkers() {
                 disableDepthTestDistance: Number.POSITIVE_INFINITY
             },
 
-            description: `<p><strong>${city.name}</strong></p><p>Latitude: ${city.latitude.toFixed(4)}°</p><p>Longitude: ${city.longitude.toFixed(4)}°</p>`
+            description: `<p><strong>${city.name}</strong></p><p>Latitude: ${city.latitude.toFixed(4)}掳</p><p>Longitude: ${city.longitude.toFixed(4)}掳</p>`
         });
 
         visitedCityEntities.push(entity);
@@ -651,7 +918,7 @@ function loadVisitedProvinces() {
                     }
                 });
 
-                console.log('✓ Loaded visited provinces overlay');
+                console.log('鉁?Loaded visited provinces overlay');
             }).catch(err => {
                 console.error('Error loading provinces geojson:', err);
             });
@@ -749,7 +1016,7 @@ function loadVisitedCountries() {
                     }
                 });
 
-                console.log('✓ Loaded visited countries overlay');
+                console.log('鉁?Loaded visited countries overlay');
             }).catch(err => {
                 console.error('Error loading countries geojson:', err);
             });
@@ -796,7 +1063,7 @@ function toggleFlagsSidebar() {
             cesiumMainContainer.style.width = '100%';
             cesiumMainContainer.style.transform = 'translateX(0)';
             cesiumMainContainer.style.marginLeft = '2rem';
-            toggleBtn.innerHTML = '▶';
+            toggleBtn.innerHTML = '<';
             toggleBtn.title = 'Expand Sidebar';
         } else {
             // Expand: slide sidebar right, reduce cesium container width and shift right
@@ -804,7 +1071,7 @@ function toggleFlagsSidebar() {
             cesiumMainContainer.style.transform = 'translateX(140px)';
             cesiumMainContainer.style.width = 'calc(100% - 140px)';
             cesiumMainContainer.style.marginLeft = '0';
-            toggleBtn.innerHTML = '◀';
+            toggleBtn.innerHTML = '>';
             toggleBtn.title = 'Collapse Sidebar';
         }
         
@@ -885,7 +1152,8 @@ function loadVisitedCountriesFlags() {
                 }
             });
 
-            console.log(`✓ Loaded ${countries.length} visited country flags`);
+            console.log(`鉁?Loaded ${countries.length} visited country flags`);
         })
         .catch(error => console.error('Error loading visited countries flags:', error));
 }
+
