@@ -1208,7 +1208,7 @@ function toggleFlagsSidebar() {
             sidebarPanel.style.transform = 'translateX(-140px)';
             cesiumMainContainer.style.width = '100%';
             cesiumMainContainer.style.transform = 'translateX(0)';
-            cesiumMainContainer.style.marginLeft = '2rem';
+            cesiumMainContainer.style.marginLeft = '0';
             toggleBtn.innerHTML = '<';
             toggleBtn.title = 'Expand Sidebar';
         } else {

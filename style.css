@@ -30,8 +30,19 @@
     position: relative;
     width: 100%;
     height: 100%;
-    min-height: 600px;
+    min-height: 0;
     overflow: hidden;
+}
+
+#footprints {
+    height: 100vh;
+    min-height: 100vh;
+    padding-top: 3rem;
+    padding-bottom: 0;
+}
+
+#footprints #cesiumMainContainer {
+    min-height: 0;
 }
 
 .cesium-viewer {
