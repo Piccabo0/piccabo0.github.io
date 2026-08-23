@@ -47,6 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (pageId === 'footprints' && typeof initCesiumMap === 'function') {
             setTimeout(initCesiumMap, 150);
         }
+
+        // Initialize stamps board when showing stamps page
+        if (pageId === 'stamps' && typeof initStampsPage === 'function') {
+            setTimeout(initStampsPage, 100);
+        }
     };
     
     // Handle initial page load and browser back/forward

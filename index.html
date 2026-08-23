@@ -30,7 +30,7 @@
 </head>
 <body>
     <!-- Navigation Bar -->
-    <nav class="bg-black/70 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-sm">
+    <nav class="bg-black/70 backdrop-blur-md fixed top-0 left-0 right-0 z-[20000] shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-center h-12">
                 <div class="flex space-x-8">
@@ -39,6 +39,7 @@
                     <a href="#experience" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="experience">Experience</a>
                     <a href="#project" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="project">Project</a>
                     <a href="#footprints" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="footprints">Footprints</a>
+                    <a href="#stamps" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="stamps">Stamps</a>
                     <a href="#blogs" class="nav-link text-sm font-medium text-gray-300 hover:text-white transition-colors duration-200" data-page="blogs">Blogs</a>
                 </div>
             </div>
@@ -98,7 +99,6 @@
                                 <ul class="text-gray-600 space-y-1">
                                     <li>• Awarded Outstanding Graduate with 3.95/4.00 GPA</li>
                                     <li>• Postgraduate Recommendation</li>
-                                    <li>• Bronze Medalist in the School Football Tournament as Defensive Midfielder</li>
                                 </ul>
                             </div>
                             <div class="flex-shrink-0 flex items-center">
@@ -176,6 +176,27 @@
                         <!-- Content Card -->
                         <div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-row gap-6">
                             <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-gray-800 mb-1">Beijing 101 High School</h3>
+                                <h4 class="text-lg font-medium text-gray-700 mb-1">Information Technology Teacher</h4>
+                                <p class="text-gray-500 mb-3">Sep 2024 - Dec 2024</p>
+                                <ul class="text-gray-600 space-y-1">
+                                    <li>• Teaching and Research of Information Technology in Primary and Secondary Schools</li>
+                                </ul>
+                            </div>
+                            <div class="flex-shrink-0 flex items-center">
+                                <img src="figures/comp_logo/101.png" alt="Company Logo" class="w-auto h-24 object-contain">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Experience Item 2 -->
+                    <div class="relative pl-0 md:pl-20">
+                        <!-- Timeline Dot -->
+                        <div class="absolute left-0 top-1 w-4 h-4 bg-blue-600 rounded-full border-4 border-white shadow hidden md:block" style="left: 1.5rem;"></div>
+                        
+                        <!-- Content Card -->
+                        <div class="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-row gap-6">
+                            <div class="flex-1">
                                 <h3 class="text-2xl font-bold text-gray-800 mb-1">Microsoft Research Asia</h3>
                                 <h4 class="text-lg font-medium text-gray-700 mb-1">Spatial Intelligence Group</h4>
                                 <p class="text-gray-500 mb-3">Jun 2025 - Dec 2025</p>
@@ -230,6 +251,11 @@
         </div>
     </section>
 
+    <!-- Stamps Section -->
+    <section id="stamps" class="page h-screen pt-12 pb-0 items-stretch justify-start overflow-hidden" style="display: none;">
+        <div id="stampsBoard" class="stamps-board" aria-label="Stacked stamp papers"></div>
+    </section>
+
     <!-- Blogs Section -->
     <section id="blogs" class="page min-h-screen flex items-center justify-center bg-gray-50" style="display: none;">
         <div class="text-center">
@@ -239,6 +265,7 @@
 
     <!-- Custom JavaScript -->
     <script src="script.js"></script>
+    <script src="stamps.js"></script>
     <script src="footprints.js"></script>
 </body>
 </html>

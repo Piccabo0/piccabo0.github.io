@@ -959,6 +959,35 @@ function getEntityName(entity) {
     return '';
 }
 
+function normalizeCountryName(name) {
+    return String(name || '')
+        .toLowerCase()
+        .replace(/[()]/g, ' ')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
+}
+
+function buildVisitedCountryNameSet(visitedNames) {
+    const normalized = new Set((visitedNames || []).map(normalizeCountryName).filter(Boolean));
+
+    const chinaAliases = [
+        'china',
+        'people s republic of china',
+        'prc',
+        'pr china'
+    ];
+
+    // If China is visited, treat Taiwan as covered by the same overlay.
+    const chinaVisited = chinaAliases.some(alias => normalized.has(alias));
+    if (chinaVisited) {
+        normalized.add('taiwan');
+        normalized.add('taiwan province of china');
+        normalized.add('taiwan china');
+    }
+
+    return normalized;
+}
+
 /**
  * Load and render visited provinces by reading local JSON and matching against province GeoJSON
  */
@@ -1080,6 +1109,7 @@ function loadVisitedCountries() {
         })
         .then(json => {
             const visitedNames = (json.countries || []).map(c => (c.name || '').trim());
+            const visitedNameSet = buildVisitedCountryNameSet(visitedNames);
             if (visitedNames.length === 0) {
                 console.log('No visited countries found');
                 return;
@@ -1098,7 +1128,8 @@ function loadVisitedCountries() {
                 const entities = dataSource.entities.values;
                 entities.forEach(entity => {
                     const ename = getEntityName(entity);
-                    const matched = visitedNames.includes(ename) || visitedNames.includes(ename.replace(/\s+Province$/i, ''));
+                    const normalizedEntityName = normalizeCountryName(ename);
+                    const matched = visitedNames.includes(ename) || visitedNameSet.has(normalizedEntityName);
 
                     if (entity.polygon) {
                         if (matched) {

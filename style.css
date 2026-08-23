@@ -163,3 +163,87 @@
     word-break: break-word;
     max-width: 100%;
 }
+
+#stamps {
+    background:
+        radial-gradient(circle at 14% 16%, rgba(232, 244, 236, 0.38), transparent 34%),
+        radial-gradient(circle at 84% 20%, rgba(183, 214, 194, 0.3), transparent 40%),
+        repeating-linear-gradient(
+            25deg,
+            rgba(92, 128, 107, 0.055) 0,
+            rgba(92, 128, 107, 0.055) 2px,
+            rgba(208, 226, 214, 0.06) 2px,
+            rgba(208, 226, 214, 0.06) 6px
+        ),
+        linear-gradient(155deg, #c9dbcf 0%, #b7cfbf 44%, #a8c4b1 100%);
+}
+
+.stamps-board {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 3rem);
+    min-height: 0;
+    padding: 10px;
+    background-color: transparent;
+    overflow: hidden;
+}
+
+.stamp-paper {
+    position: absolute;
+    width: 170px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0 !important;
+    box-shadow: none;
+    transition: transform 0.22s ease;
+}
+
+.stamp-paper::before {
+    content: none;
+}
+
+.stamp-paper:hover {
+    box-shadow: none;
+}
+
+.stamp-paper img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    padding: 9px;
+    border: 1px solid rgba(22, 86, 62, 0.6);
+    background: #2f7a5c;
+    clip-path: polygon(
+        10% 0%, 14% 4%, 18% 0%, 22% 4%, 26% 0%, 30% 4%, 34% 0%, 38% 4%, 42% 0%,
+        46% 4%, 50% 0%, 54% 4%, 58% 0%, 62% 4%, 66% 0%, 70% 4%, 74% 0%, 78% 4%,
+        82% 0%, 86% 4%, 90% 0%, 94% 4%, 100% 10%,
+        96% 14%, 100% 18%, 96% 22%, 100% 26%, 96% 30%, 100% 34%, 96% 38%, 100% 42%,
+        96% 46%, 100% 50%, 96% 54%, 100% 58%, 96% 62%, 100% 66%, 96% 70%, 100% 74%,
+        96% 78%, 100% 82%, 96% 86%, 100% 90%, 96% 94%,
+        90% 100%, 86% 96%, 82% 100%, 78% 96%, 74% 100%, 70% 96%, 66% 100%, 62% 96%,
+        58% 100%, 54% 96%, 50% 100%, 46% 96%, 42% 100%, 38% 96%, 34% 100%, 30% 96%,
+        26% 100%, 22% 96%, 18% 100%, 14% 96%, 10% 100%,
+        0% 90%, 4% 86%, 0% 82%, 4% 78%, 0% 74%, 4% 70%, 0% 66%, 4% 62%, 0% 58%,
+        4% 54%, 0% 50%, 4% 46%, 0% 42%, 4% 38%, 0% 34%, 4% 30%, 0% 26%, 4% 22%,
+        0% 18%, 4% 14%, 0% 10%
+    );
+    box-shadow:
+        inset 0 0 0 1px rgba(221, 239, 229, 0.7),
+        inset 0 0 0 7px #2b6e53,
+        0 8px 14px rgba(19, 53, 39, 0.3);
+}
+
+@media (max-width: 768px) {
+    .stamps-board {
+        height: calc(100vh - 2.8rem);
+        padding: 8px;
+    }
+
+    .stamp-paper {
+        width: 120px;
+        padding: 0 !important;
+    }
+}
