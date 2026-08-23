@@ -25,9 +25,13 @@ let flightRouteEntities = [];
 let showFlightRoutes = false;
 let flightRoutesLoaded = false;
 let flightRoutesLoading = false;
+let flightRouteArrowImage = null;
 
 // Add variable for sidebar collapsed state
 let flagsSidebarCollapsed = true;
+
+const FOOTPRINT_BUTTON_DEFAULT_BG = '#334155';
+const FOOTPRINT_BUTTON_ACTIVE_BG = '#2563eb';
 
 // Country code mapping for flag-icons library
 const COUNTRY_CODE_MAP = {
@@ -239,7 +243,7 @@ function setupControlButtons() {
             toggleProvincesBtn.innerText = '🗺️';
             Object.assign(toggleProvincesBtn.style, {
                 padding: '8px 10px',
-                background: '#4b5563',
+                background: FOOTPRINT_BUTTON_DEFAULT_BG,
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '6px',
@@ -265,7 +269,7 @@ function setupControlButtons() {
             toggleCountriesBtn.innerText = '🌍';
             Object.assign(toggleCountriesBtn.style, {
                 padding: '8px 10px',
-                background: '#4b5563',
+                background: FOOTPRINT_BUTTON_DEFAULT_BG,
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '6px',
@@ -291,7 +295,7 @@ function setupControlButtons() {
             toggleFlightsBtn.innerText = '✈';
             Object.assign(toggleFlightsBtn.style, {
                 padding: '8px 10px',
-                background: '#4b5563',
+                background: FOOTPRINT_BUTTON_DEFAULT_BG,
                 color: '#ffffff',
                 border: 'none',
                 borderRadius: '6px',
@@ -312,7 +316,7 @@ function setupControlButtons() {
 function setFootprintsButtonActive(buttonId, isActive, activeColor) {
     const button = document.getElementById(buttonId);
     if (button) {
-        button.style.background = isActive ? activeColor : '#4b5563';
+        button.style.background = isActive ? activeColor : FOOTPRINT_BUTTON_DEFAULT_BG;
     }
 }
 
@@ -373,14 +377,14 @@ function haversineDistanceMeters(start, end) {
     return 2 * radius * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function buildGreatCircleArcPositions(start, end, offsetIndex = 0, offsetCount = 1) {
+function buildGreatCircleArcPositions(start, end, offsetIndex = 0, offsetCount = 1, offsetDirection = 1) {
     const startCartographic = Cesium.Cartographic.fromDegrees(start.lon, start.lat);
     const endCartographic = Cesium.Cartographic.fromDegrees(end.lon, end.lat);
     const geodesic = new Cesium.EllipsoidGeodesic(startCartographic, endCartographic);
     const distance = haversineDistanceMeters(start, end);
     const sampleCount = Math.max(16, Math.min(96, Math.ceil(distance / 180000)));
-    const maxHeight = Math.max(60000, Math.min(650000, distance * 0.08));
-    const offsetSpacing = Math.max(12000, Math.min(65000, distance * 0.02));
+    const maxHeight = Math.max(140000, Math.min(1300000, distance * 0.05));
+    const offsetSpacing = Math.max(18000, Math.min(90000, distance * 0.05));
     const centeredOffset = offsetIndex - (offsetCount - 1) / 2;
     const positions = [];
 
@@ -397,13 +401,21 @@ function buildGreatCircleArcPositions(start, end, offsetIndex = 0, offsetCount =
         const tangent = Cesium.Cartesian3.subtract(routeVector, projection, new Cesium.Cartesian3());
         Cesium.Cartesian3.normalize(tangent, tangent);
         const lateral = Cesium.Cartesian3.normalize(Cesium.Cartesian3.cross(normal, tangent, new Cesium.Cartesian3()), new Cesium.Cartesian3());
-        const laneOffset = centeredOffset * offsetSpacing * Math.sin(Math.PI * fraction);
+        const laneOffset = centeredOffset * offsetDirection * offsetSpacing * Math.sin(Math.PI * fraction);
         const height = Math.sin(Math.PI * fraction) * maxHeight;
         const elevated = Cesium.Cartesian3.add(surfacePoint, Cesium.Cartesian3.multiplyByScalar(normal, height, new Cesium.Cartesian3()), new Cesium.Cartesian3());
         positions.push(Cesium.Cartesian3.add(elevated, Cesium.Cartesian3.multiplyByScalar(lateral, laneOffset, new Cesium.Cartesian3()), new Cesium.Cartesian3()));
     }
 
     return positions;
+}
+
+function getRoutePairKey(origin, destination) {
+    return [origin.iata, destination.iata].sort().join('|');
+}
+
+function getRouteDirectionSign(origin, destination) {
+    return origin.iata <= destination.iata ? 1 : -1;
 }
 
 function clearFlightRoutes() {
@@ -419,6 +431,61 @@ function clearFlightRoutes() {
     flightRoutesLoaded = false;
 }
 
+function getFlightRouteWidthByHeight(height) {
+    const minWidth = 4;
+    const maxWidth = 10;
+    const clampedHeight = Math.max(800000, Math.min(22000000, height));
+    const t = (clampedHeight - 800000) / (22000000 - 800000);
+    return minWidth + (maxWidth - minWidth) * t;
+}
+
+function updateFlightRouteWidths() {
+    if (!cesiumViewer || flightRouteEntities.length === 0) {
+        return;
+    }
+
+    const cameraHeight = cesiumViewer.camera.positionCartographic.height;
+    const width = getFlightRouteWidthByHeight(cameraHeight);
+
+    flightRouteEntities.forEach(entity => {
+        if (entity && entity.polyline) {
+            entity.polyline.width = width;
+        }
+    });
+}
+
+function getFlightRouteArrowImage() {
+    if (flightRouteArrowImage) {
+        return flightRouteArrowImage;
+    }
+
+    const size = 48;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const context = canvas.getContext('2d');
+    if (!context) {
+        return null;
+    }
+
+    context.clearRect(0, 0, size, size);
+    context.fillStyle = 'rgba(255, 255, 255, 0.95)';
+    context.strokeStyle = 'rgba(0, 191, 255, 0.95)';
+    context.lineWidth = 2;
+    context.lineJoin = 'round';
+
+    context.beginPath();
+    context.moveTo(10, 10);
+    context.lineTo(38, 24);
+    context.lineTo(10, 38);
+    context.closePath();
+    context.fill();
+    context.stroke();
+
+    flightRouteArrowImage = canvas.toDataURL('image/png');
+    return flightRouteArrowImage;
+}
+
 function addAirportPoint(airport) {
     const entity = cesiumViewer.entities.add({
         position: Cesium.Cartesian3.fromDegrees(airport.lon, airport.lat, 0),
@@ -426,19 +493,7 @@ function addAirportPoint(airport) {
             pixelSize: 5,
             color: Cesium.Color.WHITE.withAlpha(0.95),
             outlineColor: Cesium.Color.DEEPSKYBLUE,
-            outlineWidth: 2,
-            disableDepthTestDistance: Number.POSITIVE_INFINITY
-        },
-        label: {
-            text: airport.iata,
-            font: '12px sans-serif',
-            fillColor: Cesium.Color.WHITE,
-            outlineColor: Cesium.Color.BLACK,
-            outlineWidth: 2,
-            style: Cesium.LabelStyle.FILL_AND_OUTLINE,
-            pixelOffset: new Cesium.Cartesian2(0, -16),
-            distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 8000000),
-            disableDepthTestDistance: Number.POSITIVE_INFINITY
+            outlineWidth: 2
         },
         description: `<p><strong>${airport.iata}</strong> ${airport.name}</p><p>${airport.city}${airport.city && airport.country ? ', ' : ''}${airport.country}</p>`
     });
@@ -471,7 +526,7 @@ function loadFlightRoutes() {
                 return;
             }
 
-            const routeKey = `${origin.iata}|${destination.iata}`;
+            const routeKey = getRoutePairKey(origin, destination);
             routeCounts.set(routeKey, (routeCounts.get(routeKey) || 0) + 1);
             airportPoints.set(origin.iata, origin);
             airportPoints.set(destination.iata, destination);
@@ -486,18 +541,29 @@ function loadFlightRoutes() {
                 return;
             }
 
-            const routeKey = `${origin.iata}|${destination.iata}`;
+            const routeKey = getRoutePairKey(origin, destination);
             const offsetIndex = routeOffsets.get(routeKey) || 0;
             routeOffsets.set(routeKey, offsetIndex + 1);
 
-            const positions = buildGreatCircleArcPositions(origin, destination, offsetIndex, routeCounts.get(routeKey) || 1);
+            const positions = buildGreatCircleArcPositions(
+                origin,
+                destination,
+                offsetIndex,
+                routeCounts.get(routeKey) || 1,
+                getRouteDirectionSign(origin, destination)
+            );
             const routeLabel = `${origin.iata} -> ${destination.iata}`;
             const flightNumber = flight.flightNumber || 'Flight';
             const routeEntity = cesiumViewer.entities.add({
                 name: `${flightNumber} ${routeLabel}`,
                 polyline: {
                     positions,
-                    width: 3.4,
+                    width: new Cesium.CallbackProperty(() => {
+                        if (!cesiumViewer) {
+                            return 2.1;
+                        }
+                        return getFlightRouteWidthByHeight(cesiumViewer.camera.positionCartographic.height);
+                    }, false),
                     material: new Cesium.PolylineGlowMaterialProperty({
                         glowPower: 0.18,
                         color: Cesium.Color.DEEPSKYBLUE.withAlpha(0.82)
@@ -515,15 +581,50 @@ function loadFlightRoutes() {
             });
 
             flightRouteEntities.push(routeEntity);
+
+            const arrowMidIndex = Math.floor(positions.length * 0.5);
+            const arrowPosition = positions[arrowMidIndex] || positions[Math.floor(positions.length / 2)];
+            const arrowHeading = Cesium.Cartesian3.normalize(
+                Cesium.Cartesian3.subtract(
+                    positions[Math.min(positions.length - 1, arrowMidIndex + 1)] || positions[positions.length - 1],
+                    positions[Math.max(0, arrowMidIndex - 1)] || positions[0],
+                    new Cesium.Cartesian3()
+                ),
+                new Cesium.Cartesian3()
+            );
+            const arrowBillboard = cesiumViewer.entities.add({
+                position: arrowPosition,
+                billboard: {
+                    image: getFlightRouteArrowImage(),
+                    width: 16,
+                    height: 16,
+                    color: Cesium.Color.WHITE,
+                    rotation: new Cesium.CallbackProperty(() => {
+                        if (!cesiumViewer) {
+                            return 0;
+                        }
+
+                        const screenDirection = Cesium.Matrix4.multiplyByPointAsVector(
+                            cesiumViewer.camera.viewMatrix,
+                            arrowHeading,
+                            new Cesium.Cartesian3()
+                        );
+                        return Math.atan2(screenDirection.y, screenDirection.x);
+                    }, false),
+                    verticalOrigin: Cesium.VerticalOrigin.CENTER,
+                    horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
+                    disableDepthTestDistance: Number.POSITIVE_INFINITY
+                }
+            });
+            flightRouteEntities.push(arrowBillboard);
         });
 
         airportPoints.forEach(addAirportPoint);
-
         flightRoutesLoaded = true;
         console.log(`Loaded ${renderedRoutes} flight routes; skipped ${skippedRoutes} incomplete routes`);
     }).catch(error => {
         showFlightRoutes = false;
-        setFootprintsButtonActive('toggleFlightRoutesBtn', false, '#0284c7');
+    setFootprintsButtonActive('toggleFlightRoutesBtn', false, FOOTPRINT_BUTTON_ACTIVE_BG);
         console.error('Error loading flight routes:', error);
     }).finally(() => {
         flightRoutesLoading = false;
@@ -532,7 +633,9 @@ function loadFlightRoutes() {
 
 function toggleFlightRoutes() {
     showFlightRoutes = !showFlightRoutes;
-    setFootprintsButtonActive('toggleFlightRoutesBtn', showFlightRoutes, '#0284c7');
+    setFootprintsButtonActive('toggleFlightRoutesBtn', showFlightRoutes, FOOTPRINT_BUTTON_ACTIVE_BG);
+
+    setVisitedCityMarkersVisible(!showFlightRoutes);
 
     if (showFlightRoutes) {
         loadFlightRoutes();
@@ -554,6 +657,12 @@ function clearVisitedCityMarkers() {
     });
 
     visitedCityEntities = [];
+}
+
+function setVisitedCityMarkersVisible(visible) {
+    visitedCityEntities.forEach(entity => {
+        entity.show = visible;
+    });
 }
 
 /**
@@ -753,10 +862,9 @@ function addVisitedCityMarkers() {
             // 鏋佺畝鍦嗙偣
             point: {
                 pixelSize: 4,
-                color: Cesium.Color.RED.withAlpha(0.9),
+                color: Cesium.Color.DEEPSKYBLUE.withAlpha(0.9),
                 outlineColor: Cesium.Color.WHITE,
-                outlineWidth: 1,
-                disableDepthTestDistance: Number.POSITIVE_INFINITY
+                outlineWidth: 1
             },
 
             description: `<p><strong>${city.name}</strong></p><p>Latitude: ${city.latitude.toFixed(4)}掳</p><p>Longitude: ${city.longitude.toFixed(4)}掳</p>`
@@ -778,6 +886,7 @@ function loadVisitedCitiesFromJson() {
         .then(data => {
             visitedCities = data.cities || [];
             addVisitedCityMarkers();
+            setVisitedCityMarkersVisible(!showFlightRoutes);
         })
         .catch(error => console.error('Error loading visited cities JSON:', error));
 }
@@ -944,6 +1053,9 @@ function toggleVisitedProvinces() {
         }
     }
 
+    setFootprintsButtonActive('toggleVisitedProvincesBtn', showVisitedProvinces, FOOTPRINT_BUTTON_ACTIVE_BG);
+    setFootprintsButtonActive('toggleVisitedCountriesBtn', showVisitedCountries, FOOTPRINT_BUTTON_ACTIVE_BG);
+
     console.log(`Visited provinces overlay: ${showVisitedProvinces ? 'ON' : 'OFF'}`);
     return showVisitedProvinces;
 }
@@ -1041,6 +1153,9 @@ function toggleVisitedCountries() {
             visitedCountryDataSource = null;
         }
     }
+
+    setFootprintsButtonActive('toggleVisitedCountriesBtn', showVisitedCountries, FOOTPRINT_BUTTON_ACTIVE_BG);
+    setFootprintsButtonActive('toggleVisitedProvincesBtn', showVisitedProvinces, FOOTPRINT_BUTTON_ACTIVE_BG);
 
     console.log(`Visited countries overlay: ${showVisitedCountries ? 'ON' : 'OFF'}`);
     return showVisitedCountries;
